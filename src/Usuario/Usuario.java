@@ -22,6 +22,9 @@ public class Usuario {
         this._id = UUID.randomUUID();   //Acordarse de pasar el id a String para guardarlo,en json o archivo, o mostrarlo -> Ejemplo: _id.toString().
     }
 
+    public void set_id(){
+        this._id = UUID.randomUUID();
+    }
     public String getNombre() {
         return nombre;
     }
