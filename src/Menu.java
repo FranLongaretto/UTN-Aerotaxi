@@ -1,10 +1,7 @@
 import Flota.TipoAvion;
 import Usuario.Usuario;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Menu {
     List<Usuario> miLista_Usuarios = new ArrayList<>();
@@ -35,7 +32,8 @@ public class Menu {
                 }
             } catch (InputMismatchException e){//capturo el error sobre dato ingresado
                 System.out.println("Error! Debe ingresar un numero!");
-            } catch (Exception e) {//sino capturo el error y lo gestiono
+
+            } catch (NoSuchElementException e) {//sino capturo el error y lo gestiono
                 System.out.println("Error");//volver a pedirle que ingrese bien el dato
             }
         }
