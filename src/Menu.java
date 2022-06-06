@@ -2,6 +2,7 @@ import Flota.TipoAvion;
 import Usuario.Usuario;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,13 +15,8 @@ public class Menu {
         int respuesta = 5;
 
         while(respuesta != 0) {
-
             opciones_menu();
-
-            //generar el gestionamiento de las excepcciones!!!!!!!!!!!!!!
-
             try {//si ingresa el dato correcto sigue funcinando segun lo debido
-
                 respuesta = (int) scanner.nextInt();
                 switch (respuesta){
                     case 1:
@@ -37,6 +33,8 @@ public class Menu {
                         System.out.println("Saliendo del sistema");
                         break;
                 }
+            } catch (InputMismatchException e){//capturo el error sobre dato ingresado
+                System.out.println("Error! Debe ingresar un numero!");
             } catch (Exception e) {//sino capturo el error y lo gestiono
                 System.out.println("Error");//volver a pedirle que ingrese bien el dato
             }
@@ -58,29 +56,32 @@ public class Menu {
         Scanner scanner = new Scanner(System.in);
         Usuario nuevoUsuario = new Usuario();
 
-        System.out.println("Ingrese su nombre: ");
-        nuevoUsuario.setNombre(scanner.nextLine());
+        try{
+            System.out.println("Ingrese su nombre: ");
+            nuevoUsuario.setNombre(scanner.nextLine());
 
-        System.out.println("Ingrese su apellido: ");
-        nuevoUsuario.setApellido(scanner.nextLine());
+            System.out.println("Ingrese su apellido: ");
+            nuevoUsuario.setApellido(scanner.nextLine());
 
-        System.out.println("Ingrese su DNI: ");
-        nuevoUsuario.setDni(scanner.nextLine());
+            System.out.println("Ingrese su DNI: ");
+            nuevoUsuario.setDni(scanner.nextLine());
 
-        System.out.println("Ingrese su edad: ");
-        nuevoUsuario.setEdad(scanner.nextInt());
+            System.out.println("Ingrese su edad: ");
+            nuevoUsuario.setEdad(scanner.nextInt());
 
-        nuevoUsuario.set_id();
-        nuevoUsuario.setGastadoHistorico(0);
-        nuevoUsuario.setMejorCategoria(TipoAvion.NINGUNA);
-
+            nuevoUsuario.set_id();
+            nuevoUsuario.setGastadoHistorico(0);
+            nuevoUsuario.setMejorCategoria(TipoAvion.NINGUNA);
+        }catch (Exception e){
+            //mostrar exception
+        }
         //comprobar usuario con los ya registrados
         Boolean validacion = validacionUsuario(nuevoUsuario);
 
         if (validacion){
             //Guardar usuario en archivo
             nuevoUsuario.agregarEnArchivo();
-            System.out.printf("Registro Completado");
+            System.out.printf("Registro Completado \n");
             //nuevoUsuario.mostrarArchivo();
         }else{
             //Aviso de usuario existente
@@ -88,6 +89,12 @@ public class Menu {
         }
     }
 
+    private String checkName(String nombre) throws Exception{
+        if(nombre.length() == 0){
+            throw new Exception("El nombre no puede estar vacio");
+        }
+        return nombre;
+    }
     private Boolean validacionUsuario(Usuario usuario) {
         //Arroja True si no encuentra al usuario.
         //Arroja False si encuentra usuario

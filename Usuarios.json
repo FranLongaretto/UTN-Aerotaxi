@@ -1,0 +1,11 @@
+[
+  {
+    "nombre":"Prueba",
+    "apellido":"Cero",
+    "dni":12346,
+    "edad":20,
+    "_id":"36daa445-30ef-4470-aece-e5f4c5d4cfec",
+    "amountSpent":0,
+    "bestClass":"NINGUNA"
+  }
+]
