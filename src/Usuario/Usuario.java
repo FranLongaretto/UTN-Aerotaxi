@@ -1,5 +1,7 @@
 package Usuario;
 
+import Flota.TipoAvion;
+
 import java.util.UUID;
 
 public class Usuario {
@@ -7,6 +9,8 @@ public class Usuario {
     private String apellido = "";
     private int edad = 0;
     private String dni = "";
+    private double gastadoHistorico = 0;
+    private TipoAvion mejorCategoria = TipoAvion.BRONZE;
     private UUID _id;
 
     //Cada usuario va a tener que tener una lista de vuelos comprados y realizados.
@@ -25,6 +29,7 @@ public class Usuario {
     public void set_id(){
         this._id = UUID.randomUUID();
     }
+
     public String getNombre() {
         return nombre;
     }
@@ -59,6 +64,22 @@ public class Usuario {
 
     public UUID get_id() {
         return _id;
+    }
+
+    public double getGastadoHistorico() {
+        return gastadoHistorico;
+    }
+
+    public void setGastadoHistorico(double gastadoHistorico) {
+        this.gastadoHistorico += gastadoHistorico;
+    }
+
+    public TipoAvion getMejorCategoria() {
+        return mejorCategoria;
+    }
+
+    public void setMejorCategoria(TipoAvion mejorCategoria) {
+        this.mejorCategoria = mejorCategoria;
     }
 
     @Override
