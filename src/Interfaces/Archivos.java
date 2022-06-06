@@ -1,6 +1,8 @@
+package Interfaces;
+
 import java.util.List;
 
-public interface Archivos<X> {
+public interface Archivos<X>{
     List<X> leerArchivo();
     void agregarEnArchivo();
     void mostrarArchivo();
