@@ -87,12 +87,12 @@ public class Menu {
         }
     }
 
-    private String checkName(String nombre) throws Exception{
-        if(nombre.length() == 0){
-            throw new Exception("El nombre no puede estar vacio");
-        }
-        return nombre;
-    }
+//    private String checkName(String nombre) throws Exception{
+//        if(nombre.length() == 0){
+//            throw new Exception("El nombre no puede estar vacio");
+//        }
+//        return nombre;
+//    }
     private Boolean validacionUsuario(Usuario usuario) {
         //Arroja True si no encuentra al usuario.
         //Arroja False si encuentra usuario
