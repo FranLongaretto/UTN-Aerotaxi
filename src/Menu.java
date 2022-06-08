@@ -80,7 +80,7 @@ public class Menu {
             //Guardar usuario en archivo
             nuevoUsuario.agregarEnArchivo();
             System.out.printf("Registro Completado \n");
-            //nuevoUsuario.mostrarArchivo();
+            nuevoUsuario.mostrarArchivo();
         }else{
             //Aviso de usuario existente
             System.out.println("El usuario ingresado ya se encuentra en el sistema");
