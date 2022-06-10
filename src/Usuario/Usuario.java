@@ -4,8 +4,6 @@ import Flota.TipoAvion;
 import Interfaces.Archivos;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -14,12 +12,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.*;
 
 public class Usuario implements Archivos<Usuario> {
     private String nombre = "";
     private String apellido = "";
     private int edad = 0;
     private String dni = "";
+    private String password;
     private double gastadoHistorico = 0;
     private TipoAvion mejorCategoria = TipoAvion.BRONZE;
     private UUID _id;
@@ -29,11 +29,12 @@ public class Usuario implements Archivos<Usuario> {
 
     public Usuario(){}
 
-    public Usuario(String nombre, String apellido, int edad, String dni) {
+    public Usuario(String nombre, String apellido, int edad, String dni, String password) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.edad = edad;
         this.dni = dni;
+        this.password = password;
         this._id = UUID.randomUUID();   //Acordarse de pasar el id a String para guardarlo,en json o archivo, o mostrarlo -> Ejemplo: _id.toString().
     }
 
@@ -71,6 +72,15 @@ public class Usuario implements Archivos<Usuario> {
 
     public void setDni(String dni) {
         this.dni = dni;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        // Agregar Regex en caso de que sobre tiempo
+        this.password = password;
     }
 
     public UUID get_id() {
@@ -124,6 +134,21 @@ public class Usuario implements Archivos<Usuario> {
         }
         return listaUsuarios;
     }
+
+    // Chequea si hay un usuario que coincida el dni y la password
+    public Usuario userLogin(String _dni, String _password){
+        List<Usuario> usuarioList = leerArchivo();
+
+        for (Usuario user: usuarioList) {
+            if (user.getDni().equals(_dni)){
+                if (user.getPassword().equals(_password)){
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public void agregarEnArchivo() {
         File fileUsuarios = new File("Usuarios.json");
@@ -158,7 +183,7 @@ public class Usuario implements Archivos<Usuario> {
                 System.out.println("Error!!");
             }
         }else{
-            System.out.println("EL archivo esta vacio");
+            System.out.println("El archivo esta vacio");
         }
     }
 }

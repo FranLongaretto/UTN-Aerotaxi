@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="google.code.gson" level="project" />
     <orderEntry type="library" name="jackson-annotations-2.13.3" level="application" />
+    <orderEntry type="library" name="jackson-datatype-jsr310-2.13.3" level="project" />
   </component>
 </module>
