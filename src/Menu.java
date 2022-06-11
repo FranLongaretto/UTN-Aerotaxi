@@ -2,6 +2,7 @@ import Flota.TipoAvion;
 import Usuario.Usuario;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Menu {
     List<Usuario> miLista_Usuarios = new ArrayList<>();
@@ -53,28 +54,16 @@ public class Menu {
         Scanner scanner = new Scanner(System.in);
         Usuario nuevoUsuario = new Usuario();
 
-        try{
-            System.out.println("Ingrese su nombre: ");
-            nuevoUsuario.setNombre(scanner.nextLine());
+        nuevoUsuario.setNombre(chequearNombre());
+        nuevoUsuario.setApellido(chequearApellido());
+        nuevoUsuario.setDni(chequearDNI());
+        nuevoUsuario.setPassword(chequearContraseña());
+        nuevoUsuario.setEdad(chequearEdad());
 
-            System.out.println("Ingrese su apellido: ");
-            nuevoUsuario.setApellido(scanner.nextLine());
+        nuevoUsuario.set_id();
+        nuevoUsuario.setGastadoHistorico(0);
+        nuevoUsuario.setMejorCategoria(TipoAvion.NINGUNA);
 
-            System.out.println("Ingrese su DNI: ");
-            nuevoUsuario.setDni(scanner.nextLine());
-
-            System.out.println("Ingrese su contraseña: ");
-            nuevoUsuario.setPassword(scanner.nextLine());
-
-            System.out.println("Ingrese su edad: ");
-            nuevoUsuario.setEdad(scanner.nextInt());
-
-            nuevoUsuario.set_id();
-            nuevoUsuario.setGastadoHistorico(0);
-            nuevoUsuario.setMejorCategoria(TipoAvion.NINGUNA);
-        }catch (Exception e){
-            //mostrar exception
-        }
         //comprobar usuario con los ya registrados
         Boolean validacion = validacionUsuario(nuevoUsuario);
 
@@ -87,6 +76,114 @@ public class Menu {
             //Aviso de usuario existente
             System.out.println("El usuario ingresado ya se encuentra en el sistema");
         }
+    }
+
+    public String chequearNombre() {
+
+        boolean aux = false;
+        String nombre;
+        System.out.println("Ingrese su nombre: ");
+        do {
+            Scanner scanner = new Scanner(System.in);
+            nombre = scanner.nextLine();
+            try {
+
+                if (nombre.length() == 0)
+                    throw new ExeptionUsuario("Debe ingresar un nombre");
+                else
+                    aux = true;
+            } catch (ExeptionUsuario e) {
+                System.out.println(e.getMessage());
+            }
+            System.out.println();
+        } while (!aux);
+
+        return nombre;
+    }
+    public String chequearApellido() {
+
+        boolean aux = false;
+        String apellido;
+        System.out.println("Ingrese su apellido: ");
+        do {
+
+            Scanner scanner = new Scanner(System.in);
+            apellido = scanner.nextLine();
+            try {
+
+                if (apellido.length() == 0)
+                    throw new ExeptionUsuario("Debe ingresar un apellido");
+                else
+                    aux = true;
+            } catch (ExeptionUsuario e) {
+                System.out.println(e.getMessage());
+            }
+        } while (!aux);
+
+        return apellido;
+    }
+    public String chequearDNI() {
+        boolean aux = false;
+        Integer auxNum;
+        String dni = null;
+        System.out.println("Ingrese su DNI: ");
+        do {
+            Scanner scanner = new Scanner(System.in);
+            //Pattern patron = Pattern.compile("[0-9]");
+            try {
+//________________________________________________________________________________________//
+                dni = scanner.nextLine();
+                auxNum = Integer.parseInt(dni);
+                if (dni.length() == 0)
+                    throw new ExeptionUsuario("Debe ingresar un DNI");
+                else
+                    aux = true;
+            } catch (ExeptionUsuario e) {
+                System.out.println(e.getMessage());
+            }catch (NumberFormatException e){
+                System.out.println("Debe ingresar un numero");
+            }
+        } while (!aux);
+        return dni;
+    }
+    public int chequearEdad() {
+
+        int EDAD_MAXIMA = 100;
+        boolean aux = false;
+        int edad;
+        System.out.println("Ingrese su edad: ");
+        do {
+            Scanner scanner = new Scanner(System.in);
+            edad = scanner.nextInt();
+            try {
+                if (edad <= 0 || edad >= 100)
+                    throw new ExeptionUsuario("La edad ingresada no es valida");
+                else
+                    aux = true;
+            } catch (ExeptionUsuario e) {
+                System.out.println(e.getMessage());
+            }
+        }while (!aux) ;
+            return edad;
+    }
+    public String chequearContraseña() {
+
+        boolean aux = false;
+        String contraseña;
+        System.out.println("Ingrese su contraseña: ");
+        do {
+            Scanner scanner = new Scanner(System.in);
+            contraseña = scanner.nextLine();
+            try {
+                if (contraseña.length() < 3 || contraseña.length() > 12) {
+                    throw new ExeptionUsuario("Por favor ingrese una contraseña dentro de los parametros");
+                } else
+                    aux = true;
+            } catch (ExeptionUsuario e) {
+                System.out.println(e.getMessage());
+            }
+        } while (!aux);
+        return contraseña;
     }
 
     private Boolean validacionUsuario(Usuario usuario) {
@@ -118,7 +215,7 @@ public class Menu {
             System.out.println("Ingrese su contraseña: ");
             _password = scanner.nextLine();
 
-            logUsuario = logUsuario.userLogin(_dni, _password);
+            logUsuario = logUsuario.userLogin(_dni, _password);//chequeo que el usuario exista
             if (logUsuario!=null){
                 System.out.println("Bienvenido, " + logUsuario.getNombre() + " " + logUsuario.getApellido());
             } else {
@@ -132,8 +229,42 @@ public class Menu {
     public void menu_AeroTaxi(){
 
         //todas las funciones para comprar un pasaje de avion
+        fechaDeVuelo();
+        destinoDeVuelo();
+
+    }
+
+    public void fechaDeVuelo(){
+
+        Scanner scanner = new Scanner(System.in);
+        int aux = 0;
+
+        System.out.println("Inicie su viaje con AeroTaxi, elija a donde seran sus proximas vacaciones");
+        System.out.println("\nDestinos: \n" +
+                "1- Buenos Aires - Cordoba.\n" +
+                "2- Buenos Aires - Santiago del Estero.\n" +
+                "3- Buenos Aires - Montevideo.\n" +
+                "4- Cordoba - Montevideo.\n" +
+                "5- Cordoba - Santiago del Estero.\n" +
+                "6- Montevideo - Santiago del Estero.\n");
+        System.out.println("Ingrese su proximo destino.");
+
+        try{
+            aux = scanner.nextInt();
+            if (aux <=6 || aux >= 1)
+                throw new ExeptionUsuario("Debe ingresar una opcion vaida.");
+        }catch (ExeptionUsuario e){
+            System.out.println(e.getMessage());
+        }
+        // debera ingresar la fecha en que quiere viajar
 
 
+    }
+
+    public void destinoDeVuelo(){
+
+
+        System.out.println("Ingrese el destino al que desea viajar");
     }
 
     public void admin(){
