@@ -2,11 +2,11 @@ import Flota.TipoAvion;
 import Usuario.Usuario;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class Menu {
     List<Usuario> miLista_Usuarios = new ArrayList<>();
 
+    //region ----- Menu -----
     public void inicio_menu(){
         //ejecucion del programa
         Scanner scanner = new Scanner(System.in);
@@ -48,8 +48,9 @@ public class Menu {
         System.out.println("3: Admin\n");
         System.out.println("0: Salir del sistema\n");
     }
+    //endregion
 
-    //registrar el usuario
+    //region ----- Registro de Usuario -----
     public void registrarse(){
         Scanner scanner = new Scanner(System.in);
         Usuario nuevoUsuario = new Usuario();
@@ -77,7 +78,6 @@ public class Menu {
             System.out.println("El usuario ingresado ya se encuentra en el sistema");
         }
     }
-
     public String chequearNombre() {
 
         boolean aux = false;
@@ -185,7 +185,6 @@ public class Menu {
         } while (!aux);
         return contraseña;
     }
-
     private Boolean validacionUsuario(Usuario usuario) {
         //Arroja True si no encuentra al usuario.
         //Arroja False si encuentra usuario
@@ -202,7 +201,9 @@ public class Menu {
         }
         return flag;
     }
+    //endregion
 
+    //region ----- Login -----
     public void login(){
         Scanner scanner = new Scanner(System.in);
         Usuario logUsuario = new Usuario();
@@ -225,7 +226,7 @@ public class Menu {
             System.out.println("Error, por favor ingrese un texto." + e);
         }
     }
-
+    //endregion
     public void menu_AeroTaxi(){
 
         //todas las funciones para comprar un pasaje de avion
@@ -267,12 +268,72 @@ public class Menu {
         System.out.println("Ingrese el destino al que desea viajar");
     }
 
+    //region ----- ADMIN -----
     public void admin(){
-
-        //gestionar usuarios
-
-        //gestionar vuelos (mostrar fechas de vuelos, crear vuelos)
-
-        //gestionar aviones (agregar los tipos de aviones)
+        Boolean loginValido = loginAdmin(); //Devuelvo valor true si entro correctamente el admin
+        if (loginValido){
+            adminMenu(); //Si puso correcto el admin Abro menu de opciones
+        }
     }
+    public void adminMenu(){
+        Scanner scanner = new Scanner(System.in);
+        int respuesta = 5;
+        while (respuesta != 0){
+            OpcionesMenu();
+            try { //si ingresa el dato correcto sigue funcinando segun lo debido
+                respuesta = (int) scanner.nextInt();
+                switch (respuesta){
+                    case 1: //Ver Listado de vuelos por fecha especifica
+                        break;
+                    case 2: //Ver Listado de clientes
+                        Usuario usuarios = new Usuario();
+                        usuarios.mostrarArchivo();
+                        break;
+                    case 3: //Ver Listado de aviones
+                        break;
+                    case 4: //Agregar aviones
+                        agregarAviones();
+                        break;
+                    case 0: //Salir al menu principal
+                        inicio_menu();
+                        break;
+                }
+            } catch (InputMismatchException e){//capturo el error sobre dato ingresado
+                System.out.println("Error, debe ingresar un numero!");
+
+            } catch (NoSuchElementException e) {//sino capturo el error y lo gestiono
+                System.out.println("Error");//volver a pedirle que ingrese bien el dato
+            }
+        }
+    }
+    private void OpcionesMenu(){
+        System.out.println("1: Listado de Vuelos en Fecha Especifica");
+        System.out.println("2: Listado de Clientes");
+        System.out.println("3: Listado de Aviones");
+        System.out.println("4: Agregar Aviones");
+        System.out.println("0: Salir");
+    }
+    public Boolean loginAdmin(){
+        Scanner scanner = new Scanner(System.in);
+        Boolean valido = false;
+        String usuario, password;
+        System.out.println("Ingrese Usuario Administrador:");
+        usuario = scanner.nextLine();
+        if (usuario.equals("admin")){
+            System.out.println("Ingrese contraseña:");
+            password = scanner.nextLine();
+            if (password.equals("admin123")) {
+                valido = true;
+            }else{
+                System.out.println("Contraseña incorrecta");
+            }
+        }else{
+            System.out.println("Usuario incorrecta");
+        }
+        return valido;
+    }
+    private void agregarAviones(){
+
+    }
+    //endregion
 }
