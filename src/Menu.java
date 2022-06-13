@@ -276,9 +276,9 @@ public class Menu {
         }
     }
     public void adminMenu(){
-        Scanner scanner = new Scanner(System.in);
         int respuesta = 5;
         while (respuesta != 0){
+            Scanner scanner = new Scanner(System.in);
             OpcionesMenu();
             try { //si ingresa el dato correcto sigue funcinando segun lo debido
                 respuesta = (int) scanner.nextInt();
@@ -333,7 +333,31 @@ public class Menu {
         return valido;
     }
     private void agregarAviones(){
-
+        int opcion = 5;
+        while (opcion != 0) {
+            Scanner scanner = new Scanner(System.in);
+            OpcionesAviones();
+            opcion = scanner.nextInt();
+            switch (opcion){
+                case 1: //Agregar avion BRONZE
+                    break;
+                case 2: //Agregar avion SILVER
+                    break;
+                case 3: //Agregar avion GOLD
+                    break;
+                case 0: //Salir menu admin
+                    adminMenu();
+                default:
+                    System.out.println("Ingrese una opcion valida.");
+            }
+        }
+    }
+    private void OpcionesAviones(){
+        System.out.println("\tAgregar Tipo de Gold");
+        System.out.println("1: Gold BRONZE");
+        System.out.println("2: Gold SILVER");
+        System.out.println("3: Gold GOLD");
+        System.out.println("0: Salir al menu admin");
     }
     //endregion
 }
