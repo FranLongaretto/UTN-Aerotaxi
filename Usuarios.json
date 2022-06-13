@@ -1,1 +1,1 @@
-[{"nombre":"Jeremias","apellido":"Loza","edad":21,"dni":"43317391","password":"123321","gastadoHistorico":0.0,"mejorCategoria":"NINGUNA","_id":"5392fbf2-417a-490b-ab3b-4edcb6c9f62d"}]
+[{"nombre":"Jeremias","apellido":"Loza","edad":21,"dni":"43317391","password":"123321","gastadoHistorico":0.0,"mejorCategoria":"NINGUNA","_id":"5392fbf2-417a-490b-ab3b-4edcb6c9f62d","admin":true},{"nombre":"Juan","apellido":"Lopez","edad":31,"dni":"43317392","password":"123321","gastadoHistorico":0.0,"mejorCategoria":"NINGUNA","_id":"5392fbf2-417a-490b-ab3b-4edcb6c9f62e","admin":false}]
