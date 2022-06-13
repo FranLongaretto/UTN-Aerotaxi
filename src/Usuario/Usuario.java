@@ -6,13 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.*;
-import java.lang.reflect.Type;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.*;
 
 public class Usuario implements Archivos<Usuario> {
     private String nombre = "";
@@ -161,9 +158,9 @@ public class Usuario implements Archivos<Usuario> {
                 usuarioArrayList.add(this);
                 mapper.writeValue(fileUsuarios, usuarioArrayList);
             } else {
-                ArrayList<Usuario> userArrayList = new ArrayList<Usuario>(leerArchivo());
-                userArrayList.add(this);
-                mapper.writeValue(fileUsuarios, userArrayList);
+                ArrayList<Usuario> usuarioArrayList = new ArrayList<Usuario>(leerArchivo());
+                usuarioArrayList.add(this);
+                mapper.writeValue(fileUsuarios, usuarioArrayList);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
