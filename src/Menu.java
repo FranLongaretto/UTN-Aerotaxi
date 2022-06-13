@@ -294,6 +294,9 @@ public class Menu {
                     case 4: //Agregar aviones
                         agregarAviones();
                         break;
+                    case 5: //Agregar nuevo admin
+                        agregarAdmin();
+                        break;
                     case 0: //Salir al menu principal
                         inicio_menu();
                         break;
@@ -311,27 +314,41 @@ public class Menu {
         System.out.println("2: Listado de Clientes");
         System.out.println("3: Listado de Aviones");
         System.out.println("4: Agregar Aviones");
+        System.out.println("5: Agregar Admin");
         System.out.println("0: Salir");
     }
+
     public Boolean loginAdmin(){
         Scanner scanner = new Scanner(System.in);
         Boolean valido = false;
-        String usuario, password;
-        System.out.println("Ingrese Usuario Administrador:");
-        usuario = scanner.nextLine();
-        if (usuario.equals("admin")){
-            System.out.println("Ingrese contraseña:");
-            password = scanner.nextLine();
-            if (password.equals("admin123")) {
+        String _dni, _password;
+        Usuario logUsuario = new Usuario();
+
+        try{
+            System.out.println("Ingrese su DNI: ");
+            _dni = scanner.nextLine();
+
+            System.out.println("Ingrese su contraseña: ");
+            _password = scanner.nextLine();
+
+            logUsuario = logUsuario.userLogin(_dni, _password);
+            if (logUsuario!=null && logUsuario.isAdmin()){
                 valido = true;
-            }else{
-                System.out.println("Contraseña incorrecta");
+            } else {
+                System.out.println("El usuario y/o contraseña ingresado es incorrecto o no sos Administrador.");
             }
-        }else{
-            System.out.println("Usuario incorrecta");
+        }catch (NoSuchElementException e){
+            System.out.println("Error, por favor ingrese un texto." + e);
         }
+
         return valido;
     }
+
+    // Funcion para agregar nuevos admins
+    private void agregarAdmin(){
+
+    }
+
     private void agregarAviones(){
         int opcion = 5;
         while (opcion != 0) {

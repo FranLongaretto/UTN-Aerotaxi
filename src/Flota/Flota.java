@@ -1,6 +1,6 @@
 package Flota;
 
-public class Flota {
+public abstract class Flota {
     private String capacidad_combustible = "10000";
     private float costoServicio = 150f;
     private int cantMaxPasajeros = 100;

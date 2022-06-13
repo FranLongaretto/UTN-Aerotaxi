@@ -21,6 +21,8 @@ public class Usuario implements Archivos<Usuario> {
     private TipoAvion mejorCategoria = TipoAvion.BRONZE;
     private UUID _id;
 
+    private boolean esAdmin = false;
+
     //Cada usuario va a tener que tener una lista de vuelos comprados y realizados.
     //Y despues con esos datos se utiliza metodo para calcular cuanto lleva gastado historicamente.
 
@@ -53,6 +55,14 @@ public class Usuario implements Archivos<Usuario> {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
+    }
+
+    public boolean isAdmin() {
+        return esAdmin;
+    }
+
+    public void setAdmin(boolean esAdmin) {
+        this.esAdmin = esAdmin;
     }
 
     public int getEdad() {
@@ -102,15 +112,17 @@ public class Usuario implements Archivos<Usuario> {
 
     @Override
     public String toString() {
-        return "Usuario{\n" +
-                "_id=" + _id +
-                "\n,nombre='" + nombre + '\'' +
-                "\n, apellido='" + apellido + '\'' +
-                "\n, edad=" + edad +
-                "\n, dni='" + dni + '\'' +
-                "\n, gastadoHistorico=" + gastadoHistorico +
-                "\n, mejorCategoria=" + mejorCategoria +
-                "\n}";
+        return "----------------------\n" +
+                "\n" +
+                "ID = " + _id +
+                "\nNombre = " + nombre +
+                "\nApellido = " + apellido +
+                "\nEdad = " + edad +
+                "\nDNI = " + dni +
+                "\nGastado Historico = " + gastadoHistorico +
+                "\nMejor Categoria = " + mejorCategoria +
+                "\nAdmin = " + esAdmin +
+                "\n";
     }
 
     //Se hace override de la interfaz para tratar Archivos (en este caso de Usuarios)
