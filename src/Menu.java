@@ -1,28 +1,33 @@
 import Flota.TipoAvion;
+import Ticket.*;
 import Usuario.Usuario;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Menu {
     List<Usuario> miLista_Usuarios = new ArrayList<>();
 
     //region ----- Menu -----
-    public void inicio_menu(){
+    public void inicio_menu() {
         //ejecucion del programa
         Scanner scanner = new Scanner(System.in);
         int respuesta = 5;
 
-        while(respuesta != 0) {
+        while (respuesta != 0) {
             opciones_menu();
             try {//si ingresa el dato correcto sigue funcinando segun lo debido
                 respuesta = (int) scanner.nextInt();
-                switch (respuesta){
+                switch (respuesta) {
                     case 1:
                         registrarse();
                         break;
                     case 2:
-                        login();
-                        menu_AeroTaxi();
+                        Usuario user = login();
+                        while (user != null) {
+                            //devuelve el usuario y pregunta si el usuario no es null para mostrar el menu
+                            menu_AeroTaxi();
+                        }
                         break;
                     case 3:
                         admin();
@@ -31,7 +36,7 @@ public class Menu {
                         System.out.println("Saliendo del sistema...");
                         break;
                 }
-            } catch (InputMismatchException e){//capturo el error sobre dato ingresado
+            } catch (InputMismatchException e) {//capturo el error sobre dato ingresado
                 System.out.println("Error, debe ingresar un numero!");
 
             } catch (NoSuchElementException e) {//sino capturo el error y lo gestiono
@@ -41,7 +46,7 @@ public class Menu {
     }
 
     // Imprime opciones del menu para el usuario.
-    public void opciones_menu(){
+    public void opciones_menu() {
         System.out.println("\t¡Bienveido a AeroTaxi!\n\n");
         System.out.println("1: Registrarse\n");
         System.out.println("2: Loguearse\n");
@@ -51,7 +56,7 @@ public class Menu {
     //endregion
 
     //region ----- Registro de Usuario -----
-    public void registrarse(){
+    public void registrarse() {
         Scanner scanner = new Scanner(System.in);
         Usuario nuevoUsuario = new Usuario();
 
@@ -68,16 +73,17 @@ public class Menu {
         //comprobar usuario con los ya registrados
         Boolean validacion = validacionUsuario(nuevoUsuario);
 
-        if (validacion){
+        if (validacion) {
             //Guardar usuario en archivo
             nuevoUsuario.agregarEnArchivo();
             System.out.printf("Registro Completado \n");
             nuevoUsuario.mostrarArchivo();
-        }else{
+        } else {
             //Aviso de usuario existente
             System.out.println("El usuario ingresado ya se encuentra en el sistema");
         }
     }
+
     public String chequearNombre() {
 
         boolean aux = false;
@@ -100,6 +106,7 @@ public class Menu {
 
         return nombre;
     }
+
     public String chequearApellido() {
 
         boolean aux = false;
@@ -122,6 +129,7 @@ public class Menu {
 
         return apellido;
     }
+
     public String chequearDNI() {
         boolean aux = false;
         Integer auxNum;
@@ -140,12 +148,13 @@ public class Menu {
                     aux = true;
             } catch (ExeptionUsuario e) {
                 System.out.println(e.getMessage());
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.println("Debe ingresar un numero");
             }
         } while (!aux);
         return dni;
     }
+
     public int chequearEdad() {
 
         int EDAD_MAXIMA = 100;
@@ -163,9 +172,10 @@ public class Menu {
             } catch (ExeptionUsuario e) {
                 System.out.println(e.getMessage());
             }
-        }while (!aux) ;
-            return edad;
+        } while (!aux);
+        return edad;
     }
+
     public String chequearContraseña() {
 
         boolean aux = false;
@@ -185,15 +195,16 @@ public class Menu {
         } while (!aux);
         return contraseña;
     }
+
     private Boolean validacionUsuario(Usuario usuario) {
         //Arroja True si no encuentra al usuario.
         //Arroja False si encuentra usuario
 
         Boolean flag = true;
         miLista_Usuarios = usuario.leerArchivo(); //leerArchivo() trae lista de usuarios del json y se guarda en miLista_Usuarios
-        if (miLista_Usuarios != null){
-            for (Usuario elemento: miLista_Usuarios) {//Recorro lista y comparo usuarios.
-                if(elemento.get_id() == usuario.get_id()){
+        if (miLista_Usuarios != null) {
+            for (Usuario elemento : miLista_Usuarios) {//Recorro lista y comparo usuarios.
+                if (elemento.get_id() == usuario.get_id()) {
                     flag = false;
                     break;
                 }
@@ -204,12 +215,12 @@ public class Menu {
     //endregion
 
     //region ----- Login -----
-    public void login(){
+    public Usuario login() {
         Scanner scanner = new Scanner(System.in);
         Usuario logUsuario = new Usuario();
         String _dni, _password;
 
-        try{
+        try {
             System.out.println("Ingrese su DNI: ");
             _dni = scanner.nextLine();
 
@@ -217,56 +228,140 @@ public class Menu {
             _password = scanner.nextLine();
 
             logUsuario = logUsuario.userLogin(_dni, _password);//chequeo que el usuario exista
-            if (logUsuario!=null){
+            if (logUsuario != null) {
                 System.out.println("Bienvenido, " + logUsuario.getNombre() + " " + logUsuario.getApellido());
             } else {
                 System.out.println("El usuario y/o contraseña ingresado es incorrecto, intenta nuevamente.");
             }
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             System.out.println("Error, por favor ingrese un texto." + e);
         }
+        return logUsuario;
     }
+
     //endregion
-    public void menu_AeroTaxi(){
+        public void menuOpciones () {
+            System.out.println("1: Solicitar un vuelo.\n");
+            System.out.println("2: Cancelar un vuelo.\n");
+            System.out.println("3: Ver reservas.\n");
+            System.out.println("0: Salir.\n");
+        }
+    public void menu_AeroTaxi() {
 
+        int aux = -1;
         //todas las funciones para comprar un pasaje de avion
-        fechaDeVuelo();
-        destinoDeVuelo();
+        do {
+            menuOpciones();
+            {
+                switch (aux) {
+                    case 1:
+                        generarTicket();
+                        break;
+                    case 2:
+                        //funcion cancelar vuelo
+                        break;
+                    case 3:
+                        //mostrar reservas
+                        break;
+                    case 0:
+                        System.out.println("Volviendo al menu pricipal.");
+                        break;
+                    default:
+                        System.out.println("Ingrese un numero valido.");
+                }
+            }
+        } while (aux != 0);
+    }
+
+    public void menuOrigen () {
+        System.out.println("Ingrese la ciudad de origen:\n");
+        System.out.println("1: Buenos Aires.\n");
+        System.out.println("2: Cordoba.\n");
+        System.out.println("3: Montevideo.\n");
+        System.out.println("0: Salir.\n");
+    }
+    public void menuDestinos (Ciudad ciudadOrigen) {
+
+        if (ciudadOrigen.)
+
 
     }
 
-    public void fechaDeVuelo(){
+    public void generarTicket(){
+
+        LocalDate fecha = fechaDeVuelo();//generar funcion que me diga si esta disponible la ffecha sino que elija otra
+
+        menuOrigen();
+        int auxOrigen = -1;
+
+        do {
+            switch (auxOrigen){
+                case 1:
+
+
+            }
+        }while (auxOrigen != 0);
+
+
+
+    }
+        public LocalDate fechaDeVuelo () {
+
+            Scanner scanner = new Scanner(System.in);
+            Ticket boleto;
+            LocalDate fecha;
+
+            System.out.println("Ingrese el año en el que quiere viajar.\n");
+            int año = ingreseUnNumero();
+            System.out.println("Ingrese el mes.\n");
+            int mes = ingreseUnNumero();
+            System.out.println("Ingrese el dia.\n");
+            int dia = ingreseUnNumero();
+            fecha = LocalDate.of(año, mes, dia);
+
+            return fecha;
+        }
+        public void destinoDeVuelo () {
+
+            Scanner scanner = new Scanner(System.in);
+
+            int aux = 0;
+
+            System.out.println("Inicie su viaje con AeroTaxi, elija a donde seran sus proximas vacaciones");
+            System.out.println("\nDestinos: \n" +);
+            System.out.println("Ingrese su proximo destino.");
+
+            try {
+                aux = scanner.nextInt();
+                if (aux <= 6 || aux >= 1)
+                    throw new ExeptionUsuario("Debe ingresar una opcion vaida.");
+                else {
+
+                }
+            } catch (ExeptionUsuario e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        public Ticket OrigenDestino(){
 
         Scanner scanner = new Scanner(System.in);
-        int aux = 0;
+        Ticket origenDestino;
 
-        System.out.println("Inicie su viaje con AeroTaxi, elija a donde seran sus proximas vacaciones");
-        System.out.println("\nDestinos: \n" +
-                "1- Buenos Aires - Cordoba.\n" +
-                "2- Buenos Aires - Santiago del Estero.\n" +
-                "3- Buenos Aires - Montevideo.\n" +
-                "4- Cordoba - Montevideo.\n" +
-                "5- Cordoba - Santiago del Estero.\n" +
-                "6- Montevideo - Santiago del Estero.\n");
-        System.out.println("Ingrese su proximo destino.");
+        menuOrigen();
+        int aux = -1;
+        aux = scanner.nextInt();
 
-        try{
-            aux = scanner.nextInt();
-            if (aux <=6 || aux >= 1)
-                throw new ExeptionUsuario("Debe ingresar una opcion vaida.");
-        }catch (ExeptionUsuario e){
-            System.out.println(e.getMessage());
+        switch ()
+
+
+
+
+
+
+
+        return origenDestino;
         }
-        // debera ingresar la fecha en que quiere viajar
-
-
-    }
-
-    public void destinoDeVuelo(){
-
-
-        System.out.println("Ingrese el destino al que desea viajar");
-    }
 
     //region ----- ADMIN -----
     public void admin(){
