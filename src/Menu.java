@@ -363,112 +363,113 @@ public class Menu {
         return origenDestino;
         }
 
-        private int ingreseUnNumero () {
-            Scanner scanner = new Scanner(System.in);
-            int aux = scanner.nextInt();
-            return aux;
+    //region ----- ADMIN -----
+    public void admin(){
+        Boolean loginValido = loginAdmin(); //Devuelvo valor true si entro correctamente el admin
+        if (loginValido){
+            adminMenu(); //Si puso correcto el admin Abro menu de opciones
         }
-
-
-
-
-
-
-
-
-
-
-
-        //region ----- ADMIN -----
-        public void admin () {
-            Boolean loginValido = loginAdmin(); //Devuelvo valor true si entro correctamente el admin
-            if (loginValido) {
-                adminMenu(); //Si puso correcto el admin Abro menu de opciones
-            }
-        }
-        public void adminMenu () {
-            int respuesta = 5;
-            while (respuesta != 0) {
-                Scanner scanner = new Scanner(System.in);
-                OpcionesMenu();
-                try { //si ingresa el dato correcto sigue funcinando segun lo debido
-                    respuesta = (int) scanner.nextInt();
-                    switch (respuesta) {
-                        case 1: //Ver Listado de vuelos por fecha especifica
-                            break;
-                        case 2: //Ver Listado de clientes
-                            Usuario usuarios = new Usuario();
-                            usuarios.mostrarArchivo();
-                            break;
-                        case 3: //Ver Listado de aviones
-                            break;
-                        case 4: //Agregar aviones
-                            agregarAviones();
-                            break;
-                        case 0: //Salir al menu principal
-                            inicio_menu();
-                            break;
-                    }
-                } catch (InputMismatchException e) {//capturo el error sobre dato ingresado
-                    System.out.println("Error, debe ingresar un numero!");
-
-                } catch (NoSuchElementException e) {//sino capturo el error y lo gestiono
-                    System.out.println("Error");//volver a pedirle que ingrese bien el dato
-                }
-            }
-        }
-        private void OpcionesMenu () {
-            System.out.println("1: Listado de Vuelos en Fecha Especifica");
-            System.out.println("2: Listado de Clientes");
-            System.out.println("3: Listado de Aviones");
-            System.out.println("4: Agregar Aviones");
-            System.out.println("0: Salir");
-        }
-        public Boolean loginAdmin () {
-            Scanner scanner = new Scanner(System.in);
-            Boolean valido = false;
-            String usuario, password;
-            System.out.println("Ingrese Usuario Administrador:");
-            usuario = scanner.nextLine();
-            if (usuario.equals("admin")) {
-                System.out.println("Ingrese contraseña:");
-                password = scanner.nextLine();
-                if (password.equals("admin123")) {
-                    valido = true;
-                } else {
-                    System.out.println("Contraseña incorrecta");
-                }
-            } else {
-                System.out.println("Usuario incorrecta");
-            }
-            return valido;
-        }
-        private void agregarAviones () {
-            int opcion = 5;
-            while (opcion != 0) {
-                Scanner scanner = new Scanner(System.in);
-                OpcionesAviones();
-                opcion = scanner.nextInt();
-                switch (opcion) {
-                    case 1: //Agregar avion BRONZE
-                        break;
-                    case 2: //Agregar avion SILVER
-                        break;
-                    case 3: //Agregar avion GOLD
-                        break;
-                    case 0: //Salir menu admin
-                        adminMenu();
-                    default:
-                        System.out.println("Ingrese una opcion valida.");
-                }
-            }
-        }
-        private void OpcionesAviones () {
-            System.out.println("\tAgregar Tipo de Gold");
-            System.out.println("1: Gold BRONZE");
-            System.out.println("2: Gold SILVER");
-            System.out.println("3: Gold GOLD");
-            System.out.println("0: Salir al menu admin");
-        }
-        //endregion
     }
+    public void adminMenu(){
+        int respuesta = 5;
+        while (respuesta != 0){
+            Scanner scanner = new Scanner(System.in);
+            OpcionesMenu();
+            try { //si ingresa el dato correcto sigue funcinando segun lo debido
+                respuesta = (int) scanner.nextInt();
+                switch (respuesta){
+                    case 1: //Ver Listado de vuelos por fecha especifica
+                        break;
+                    case 2: //Ver Listado de clientes
+                        Usuario usuarios = new Usuario();
+                        usuarios.mostrarArchivo();
+                        break;
+                    case 3: //Ver Listado de aviones
+                        break;
+                    case 4: //Agregar aviones
+                        agregarAviones();
+                        break;
+                    case 5: //Agregar nuevo admin
+                        agregarAdmin();
+                        break;
+                    case 0: //Salir al menu principal
+                        inicio_menu();
+                        break;
+                }
+            } catch (InputMismatchException e){//capturo el error sobre dato ingresado
+                System.out.println("Error, debe ingresar un numero!");
+
+            } catch (NoSuchElementException e) {//sino capturo el error y lo gestiono
+                System.out.println("Error");//volver a pedirle que ingrese bien el dato
+            }
+        }
+    }
+    private void OpcionesMenu(){
+        System.out.println("1: Listado de Vuelos en Fecha Especifica");
+        System.out.println("2: Listado de Clientes");
+        System.out.println("3: Listado de Aviones");
+        System.out.println("4: Agregar Aviones");
+        System.out.println("5: Agregar Admin");
+        System.out.println("0: Salir");
+    }
+
+    public Boolean loginAdmin(){
+        Scanner scanner = new Scanner(System.in);
+        Boolean valido = false;
+        String _dni, _password;
+        Usuario logUsuario = new Usuario();
+
+        try{
+            System.out.println("Ingrese su DNI: ");
+            _dni = scanner.nextLine();
+
+            System.out.println("Ingrese su contraseña: ");
+            _password = scanner.nextLine();
+
+            logUsuario = logUsuario.userLogin(_dni, _password);
+            if (logUsuario!=null && logUsuario.isAdmin()){
+                valido = true;
+            } else {
+                System.out.println("El usuario y/o contraseña ingresado es incorrecto o no sos Administrador.");
+            }
+        }catch (NoSuchElementException e){
+            System.out.println("Error, por favor ingrese un texto." + e);
+        }
+
+        return valido;
+    }
+
+    // Funcion para agregar nuevos admins
+    private void agregarAdmin(){
+
+    }
+
+    private void agregarAviones(){
+        int opcion = 5;
+        while (opcion != 0) {
+            Scanner scanner = new Scanner(System.in);
+            OpcionesAviones();
+            opcion = scanner.nextInt();
+            switch (opcion){
+                case 1: //Agregar avion BRONZE
+                    break;
+                case 2: //Agregar avion SILVER
+                    break;
+                case 3: //Agregar avion GOLD
+                    break;
+                case 0: //Salir menu admin
+                    adminMenu();
+                default:
+                    System.out.println("Ingrese una opcion valida.");
+            }
+        }
+    }
+    private void OpcionesAviones(){
+        System.out.println("\tAgregar Tipo de Gold");
+        System.out.println("1: Gold BRONZE");
+        System.out.println("2: Gold SILVER");
+        System.out.println("3: Gold GOLD");
+        System.out.println("0: Salir al menu admin");
+    }
+    //endregion
+}
