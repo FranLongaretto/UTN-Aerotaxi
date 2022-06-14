@@ -94,4 +94,16 @@ public class Gold extends Flota implements Archivos<Gold> {
             System.out.println("El archivo esta vacio");
         }
     }
+
+    @Override
+    public void sobreEscribirArchivo(ArrayList listaArch) {
+        File fileUsuarios = new File("AvionesGold.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            mapper.writeValue(fileUsuarios, listaArch);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

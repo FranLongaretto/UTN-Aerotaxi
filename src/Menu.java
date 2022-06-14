@@ -1,7 +1,13 @@
+import Flota.Bronze;
 import Flota.TipoAvion;
 import Ticket.*;
 import Usuario.Usuario;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -460,7 +466,21 @@ public class Menu {
 
     // Funcion para agregar nuevos admins
     private void agregarAdmin(){
+        Scanner sc = new Scanner(System.in);
+        Usuario user = new Usuario();
+        ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>(user.leerArchivo());
 
+        System.out.println("Ingresa el DNI del usuario a añadir como administrador");
+        String _dni = sc.nextLine();
+
+        for (Usuario usuario: listaUsuarios) {
+            if (usuario.getDni().equals(_dni)){
+                usuario.setAdmin(true);
+                System.out.println(usuario);
+            }
+        }
+
+        user.sobreEscribirArchivo(listaUsuarios);
     }
 
     private void agregarAviones(){
@@ -471,10 +491,13 @@ public class Menu {
             opcion = scanner.nextInt();
             switch (opcion){
                 case 1: //Agregar avion BRONZE
+                    agregarBronce();
                     break;
                 case 2: //Agregar avion SILVER
+                    agregarSilver();
                     break;
                 case 3: //Agregar avion GOLD
+                    agregarGold();
                     break;
                 case 0: //Salir menu admin
                     adminMenu();
@@ -483,6 +506,21 @@ public class Menu {
             }
         }
     }
+
+    public void agregarBronce(){
+        Bronze bronze = new Bronze();
+
+
+    }
+
+    public void agregarSilver(){
+
+    }
+
+    public void agregarGold(){
+
+    }
+
     private void OpcionesAviones(){
         System.out.println("\tAgregar Tipo de Gold");
         System.out.println("1: Gold BRONZE");

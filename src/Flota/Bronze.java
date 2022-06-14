@@ -73,4 +73,17 @@ public class Bronze extends Flota implements Archivos<Bronze> {
             System.out.println("El archivo esta vacio");
         }
     }
+
+    @Override
+    public void sobreEscribirArchivo(ArrayList listaArch) {
+        File fileUsuarios = new File("AvionesBronze.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            mapper.writeValue(fileUsuarios, listaArch);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
