@@ -83,4 +83,16 @@ public class Silver extends Flota implements Archivos<Silver> {
             System.out.println("El archivo esta vacio");
         }
     }
+
+    @Override
+    public void sobreEscribirArchivo(ArrayList listaArch) {
+        File fileUsuarios = new File("AvionesSilver.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            mapper.writeValue(fileUsuarios, listaArch);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

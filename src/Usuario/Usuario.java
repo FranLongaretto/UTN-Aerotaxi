@@ -195,4 +195,16 @@ public class Usuario implements Archivos<Usuario> {
             System.out.println("El archivo esta vacio");
         }
     }
+
+    @Override
+    public void sobreEscribirArchivo(ArrayList listaArch) {
+        File fileUsuarios = new File("Usuarios.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            mapper.writeValue(fileUsuarios, listaArch);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
