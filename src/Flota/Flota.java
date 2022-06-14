@@ -7,7 +7,8 @@ public abstract class Flota {
     private float velMax = 300f;
     private TipoPropulsion propulsion = TipoPropulsion.HELICE;
     private int tarifaFija;
-
+    private int numeroAvion = 0;
+    private static int numero = 0;
     public Flota() {
     }
 
@@ -17,6 +18,18 @@ public abstract class Flota {
         this.cantMaxPasajeros = cantMaxPasajeros;
         this.velMax = velMax;
         this.propulsion = propulsion;
+        this.numeroAvion = setNumeroAvion();
+    }
+
+    public int getNumeroAvion() {
+        return numeroAvion;
+    }
+
+    public int setNumeroAvion() {
+        this.numeroAvion =  numero;
+        numero++;
+
+        return numeroAvion;
     }
 
     public String getCapacidad_combustible() {

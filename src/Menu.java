@@ -1,4 +1,6 @@
 import Flota.Bronze;
+import Flota.Gold;
+import Flota.Silver;
 import Flota.TipoAvion;
 import Ticket.*;
 import Usuario.Usuario;
@@ -250,12 +252,13 @@ public class Menu {
     //region ----- Menu Usuario -----
 
     //Menu opciones usuario
-    public void menuOpciones () {
-            System.out.println("1: Solicitar un vuelo.\n");
-            System.out.println("2: Cancelar un vuelo.\n");
-            System.out.println("3: Ver reservas.\n");
-            System.out.println("0: Salir.\n");
-        }
+    public void menuOpciones() {
+        System.out.println("1: Solicitar un vuelo.\n");
+        System.out.println("2: Cancelar un vuelo.\n");
+        System.out.println("3: Ver reservas.\n");
+        System.out.println("0: Salir.\n");
+    }
+
     public void menu_AeroTaxi(Usuario user) {
         Scanner scanner = new Scanner(System.in);
         int aux = 4;
@@ -281,7 +284,8 @@ public class Menu {
             }
         } while (aux != 0);
     }
-    public Ticket menuOrigen (Ticket tk) {
+
+    public Ticket menuOrigen(Ticket tk) {
         int opcion = 0;
         int destino = 0;
         Scanner scanerOigen = new Scanner(System.in);
@@ -291,9 +295,9 @@ public class Menu {
         System.out.println("2: Cordoba.\n");
         System.out.println("3: Montevideo.\n");
         System.out.println("0: Salir.\n");
-        while (opcion != 0){
+        while (opcion != 0) {
             opcion = scanerOigen.nextInt();
-            switch (opcion){
+            switch (opcion) {
                 case 1:
                     tk.setOrigen(Ciudad.BUENOSAIRES);
                     System.out.println("Ingrese destino");
@@ -301,13 +305,13 @@ public class Menu {
                     System.out.println("2: Cordoba");
                     System.out.println("3: Santiago");
                     destino = scanerDesino.nextInt();
-                    if(destino == 1){
+                    if (destino == 1) {
                         tk.setDestino(Ciudad.MONTEVIDEO);
-                    }else if(destino == 2){
+                    } else if (destino == 2) {
                         tk.setDestino(Ciudad.CORDOBA);
                     } else if (destino == 3) {
                         tk.setDestino(Ciudad.SANTIAGO);
-                    }else{
+                    } else {
                         System.out.println("Ingrese un numero valido!");
                     }
                     break;
@@ -317,11 +321,11 @@ public class Menu {
                     System.out.println("1: Montevideo");
                     System.out.println("2: Santiago");
                     destino = scanerDesino.nextInt();
-                    if(destino == 1){
+                    if (destino == 1) {
                         tk.setDestino(Ciudad.MONTEVIDEO);
-                    } else if (destino == 2){
+                    } else if (destino == 2) {
                         tk.setDestino(Ciudad.SANTIAGO);
-                    }else{
+                    } else {
                         System.out.println("Ingrese un numero valido!");
                     }
                     break;
@@ -336,19 +340,24 @@ public class Menu {
                     break;
             }
         }
-        return  tk;
+        return tk;
     }
-    public void generarTicket(Usuario user){
+
+    public void generarTicket(Usuario user) {
         Ticket ticket = new Ticket();
         ticket.setUsuarioDni(user.getDni());
         ticket.setFecha(fechaDeVuelo()); //generar funcion que me diga si esta disponible la ffecha sino que elija otra
         ticket = menuOrigen(ticket);
-        ticket.setPasajeros(acompañantes());
         //seleccionar avion y chequear validacion.
-        seleccionarAvion(ticket);
+        boolean validacion = false;
+        while (!validacion) {
+            ticket.setPasajeros(acompañantes());
+            seleccionarAvion(ticket);
+        }
         //costo total del vuelo y confimacion del usuario.
     }
-    public LocalDate fechaDeVuelo () {
+
+    public LocalDate fechaDeVuelo() {
         LocalDate fecha;
         System.out.println("Ingrese el año en el que quiere viajar.\n");
         int año = ingreseUnNumero();
@@ -359,12 +368,14 @@ public class Menu {
         fecha = LocalDate.of(año, mes, dia);
         return fecha;
     }
-    private int ingreseUnNumero(){
+
+    private int ingreseUnNumero() {
         Scanner scanner = new Scanner(System.in);
         int numero = scanner.nextInt();
         return numero;
     }
-    private int acompañantes(){
+
+    private int acompañantes() {
         Scanner scanner = new Scanner(System.in);
         int cantidad = 1;
         System.out.println("Ingrese la cantidad de acompañantes");
@@ -372,37 +383,52 @@ public class Menu {
         //validar si entran en el avion
         return cantidad;
     }
+
     private void seleccionarAvion(Ticket tk) {
         Scanner scanner = new Scanner(System.in);
         //funcion que te muestre aviones disponibles en fecha especifica
-        mostrarAvionesDisponibles(tk);
-        String avionSeleccionado = "";
+        int avionSeleccionado = 0;
         System.out.println("Ingrese categoria de Avion");
         System.out.println("1: Gold");
         System.out.println("2: Silver");
         System.out.println("3: Bronze");
-        avionSeleccionado = scanner.nextLine();
+        avionSeleccionado = scanner.nextInt();
+        mostrarAvionesDisponibles(tk, avionSeleccionado);
     }
-    private void mostrarAvionesDisponibles(Ticket tk){
 
+    private void mostrarAvionesDisponibles(Ticket tk, int claseAvion) {
+
+        if (claseAvion == 1) {
+            Bronze avionBronze = new Bronze();
+            avionBronze.mostrarArchivo();
+        } else if (claseAvion == 2) {
+            Silver avionSilver = new Silver();
+            avionSilver.mostrarArchivo();
+        } else if (claseAvion == 3) {
+            Gold avionGold = new Gold();
+            avionGold.mostrarArchivo();
+        } else {
+            System.out.println("Ingrese una opcion correcta");
+        }
     }
     //endregion
 
     //region ----- ADMIN -----
-    public void admin(){
+    public void admin() {
         Boolean loginValido = loginAdmin(); //Devuelvo valor true si entro correctamente el admin
-        if (loginValido){
+        if (loginValido) {
             adminMenu(); //Si puso correcto el admin Abro menu de opciones
         }
     }
-    public void adminMenu(){
+
+    public void adminMenu() {
         int respuesta = 5;
-        while (respuesta != 0){
+        while (respuesta != 0) {
             Scanner scanner = new Scanner(System.in);
             OpcionesMenu();
             try { //si ingresa el dato correcto sigue funcinando segun lo debido
                 respuesta = (int) scanner.nextInt();
-                switch (respuesta){
+                switch (respuesta) {
                     case 1: //Ver Listado de vuelos por fecha especifica
                         break;
                     case 2: //Ver Listado de clientes
@@ -421,7 +447,7 @@ public class Menu {
                         inicio_menu();
                         break;
                 }
-            } catch (InputMismatchException e){//capturo el error sobre dato ingresado
+            } catch (InputMismatchException e) {//capturo el error sobre dato ingresado
                 System.out.println("Error, debe ingresar un numero!");
 
             } catch (NoSuchElementException e) {//sino capturo el error y lo gestiono
@@ -429,7 +455,8 @@ public class Menu {
             }
         }
     }
-    private void OpcionesMenu(){
+
+    private void OpcionesMenu() {
         System.out.println("1: Listado de Vuelos en Fecha Especifica");
         System.out.println("2: Listado de Clientes");
         System.out.println("3: Listado de Aviones");
@@ -438,13 +465,13 @@ public class Menu {
         System.out.println("0: Salir");
     }
 
-    public Boolean loginAdmin(){
+    public Boolean loginAdmin() {
         Scanner scanner = new Scanner(System.in);
         Boolean valido = false;
         String _dni, _password;
         Usuario logUsuario = new Usuario();
 
-        try{
+        try {
             System.out.println("Ingrese su DNI: ");
             _dni = scanner.nextLine();
 
@@ -452,12 +479,12 @@ public class Menu {
             _password = scanner.nextLine();
 
             logUsuario = logUsuario.userLogin(_dni, _password);
-            if (logUsuario!=null && logUsuario.isAdmin()){
+            if (logUsuario != null && logUsuario.isAdmin()) {
                 valido = true;
             } else {
                 System.out.println("El usuario y/o contraseña ingresado es incorrecto o no sos Administrador.");
             }
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             System.out.println("Error, por favor ingrese un texto." + e);
         }
 
@@ -483,13 +510,13 @@ public class Menu {
         user.sobreEscribirArchivo(listaUsuarios);
     }
 
-    private void agregarAviones(){
+    private void agregarAviones() {
         int opcion = 5;
         while (opcion != 0) {
             Scanner scanner = new Scanner(System.in);
             OpcionesAviones();
             opcion = scanner.nextInt();
-            switch (opcion){
+            switch (opcion) {
                 case 1: //Agregar avion BRONZE
                     agregarBronce();
                     break;
