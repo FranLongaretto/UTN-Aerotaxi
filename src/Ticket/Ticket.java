@@ -12,12 +12,14 @@ public class Ticket {
     private int pasajeros;
     private double precio;
     private int distancia;
-    private int usuarioDni;
+    private String usuarioDni;
     private boolean cancelarTicket;
     private String numeroDeAvion;
 
+    public Ticket() {
+    }
 
-    public Ticket(LocalDate fecha, Ciudad origen, Ciudad destino, int pasajeros, int usuarioDni, String numeroDeAvion) throws IOException {
+    public Ticket(LocalDate fecha, Ciudad origen, Ciudad destino, int pasajeros, String usuarioDni, String numeroDeAvion) throws IOException {
         this.fecha = fecha;
         this.origen = origen;
         this.destino = destino;
@@ -37,6 +39,9 @@ public class Ticket {
         this.destino = destino;
     }
 
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
     public LocalDate getFecha() {
         return fecha;
     }
@@ -62,7 +67,19 @@ public class Ticket {
 
     }
 
-    public int getUsuarioDni() {
+    public void setUsuarioDni(String usuarioDni) {
+        this.usuarioDni = usuarioDni;
+    }
+
+    public void setPasajeros(int pasajeros) {
+        this.pasajeros = pasajeros;
+    }
+
+    public boolean isCancelarTicket() {
+        return cancelarTicket;
+    }
+
+    public String getUsuarioDni() {
         return usuarioDni;
     }
 
@@ -81,7 +98,6 @@ public class Ticket {
     public int getDistancia(){return this.distancia;}
 
     private void setDistnacia() {
-
         HashSet<Ciudad> origenDestino = new HashSet<>();
         origenDestino.add(this.destino);
         origenDestino.add(this.origen);
