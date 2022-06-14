@@ -168,7 +168,7 @@ public class Usuario implements Archivos<Usuario> {
             if (fileUsuarios.createNewFile()) {
                 ArrayList<Usuario> usuarioArrayList = new ArrayList<>();
                 usuarioArrayList.add(this);
-                mapper.writeValue(fileUsuarios, usuarioArrayList);
+                mapper.writeValue(fileUsuarios, usuarioArrayList);//escribe la lista en el archivo
             } else {
                 ArrayList<Usuario> usuarioArrayList = new ArrayList<Usuario>(leerArchivo());
                 usuarioArrayList.add(this);
