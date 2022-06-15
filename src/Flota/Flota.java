@@ -1,7 +1,8 @@
 package Flota;
 
+import Ticket.Ticket;
+
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.UUID;
 
 public abstract class Flota {

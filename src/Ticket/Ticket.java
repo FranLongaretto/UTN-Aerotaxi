@@ -35,6 +35,14 @@ public class Ticket implements Archivos<Ticket> {
         this.cancelarTicket = false;
     }
 
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public void setDistancia(int distancia) {
+        this.distancia = distancia;
+    }
+
     public void setOrigen(Ciudad origen) {
         this.origen = origen;
     }
