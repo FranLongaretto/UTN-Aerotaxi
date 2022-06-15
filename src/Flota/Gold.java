@@ -144,4 +144,7 @@ public class Gold extends Flota implements Archivos<Gold> {
             throw new RuntimeException(e);
         }
     }
+    public double precioVuelo(Ticket tk){
+        return (double) ((tk.getPasajeros() * 3500 ) + (this.getTarifaFija()) + (tk.getDistancia() * this.getCostoServicio() ));
+    }
 }

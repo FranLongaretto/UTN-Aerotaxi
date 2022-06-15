@@ -132,4 +132,7 @@ public class Silver extends Flota implements Archivos<Silver> {
             throw new RuntimeException(e);
         }
     }
+    public double precioVuelo(Ticket tk){
+        return (double) ((tk.getPasajeros() * 3500 ) + (this.getTarifaFija()) + (tk.getDistancia() * this.getCostoServicio() ));
+    }
 }

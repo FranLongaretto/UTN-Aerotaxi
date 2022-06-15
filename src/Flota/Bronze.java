@@ -119,4 +119,7 @@ public class Bronze extends Flota implements Archivos<Bronze> {
             throw new RuntimeException(e);
         }
     }
+    public double precioVuelo(Ticket tk){
+        return (double) ((tk.getPasajeros() * 3500 ) + (this.getTarifaFija()) + (tk.getDistancia() * this.getCostoServicio() ));
+    }
 }

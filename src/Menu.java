@@ -274,7 +274,7 @@ public class Menu {
                         //Se tiene que guardar el precio del tk.= (funcion que lo devuelva)
                     } else {
                         //el usuario deberia ingresar otra fecha o salir al menu principal
-                        System.out.println("Fecha o capacidad del avion invalida, Por favor vuelva a ingresar los datos");
+                        System.out.println("holaaaaa");
                     }
                     //guardar datos al usuario (total gastado)
                     break;
@@ -301,26 +301,23 @@ public class Menu {
 
         ticket.setUsuarioDni(user.getDni());
         ticket = menuOrigen(ticket);
-        //ticket.setPasajeros(acompañantes());
-        mostrarFechas();
-        ticket.setFecha(fechaDeVuelo());
-        avionAux = seleccionarAvion(ticket);
+        do {
+            mostrarFechas();
+            ticket.setFecha(fechaDeVuelo());
+            avionAux = seleccionarAvion(ticket);
 
-        if (avionAux == null) {
-            //ticket.setNumeroDeAvion(seleccionarAvion(ticket).getNumeroAvion());
-            //devuelve al menu
-            ticket = null;
+            if (avionAux == null) {
+                System.out.println("Fecha o capacidad del avion invalida, Por favor vuelva a ingresar los datos");
+                System.out.println("\nIngrese 1 para volver a solicitar un vuelo, 0 volver al menu pricipal.");
+                opcion = sc.nextInt();
+            } else {
+                //termino de generar ticket y genero el pago
+                System.out.println("Ingrese 1 si desea cambiar los datos, 0 para continuar ");
+                opcion = sc.nextInt();
+            }
+        } while (opcion != 0);
 
-        } else {
-            //termino de generar ticket y genero el pago
-        }
 
-/*
-        System.out.println(ticket.toString());
-        System.out.println("Los datos son correctos? 1 por si / 0 por no");
-        opcion = sc.nextInt();
-        if (opcion != 1) ticket = null;
-*/
         return ticket;
     }
 
@@ -351,6 +348,7 @@ public class Menu {
             case 3:
                 tk.setOrigen(Ciudad.MONTEVIDEO);
                 tk.setDestino(Ciudad.SANTIAGO);
+                tk.setDistancia(2100);
                 System.out.println(tk);
                 break;
             case 0:
@@ -375,10 +373,13 @@ public class Menu {
         destino = sc.nextInt();
         if (destino == 1) {
             tk.setDestino(Ciudad.MONTEVIDEO);
+            tk.setDistancia(950);
         } else if (destino == 2) {
             tk.setDestino(Ciudad.CORDOBA);
+            tk.setDistancia(695);
         } else if (destino == 3) {
             tk.setDestino(Ciudad.SANTIAGO);
+            tk.setDistancia(1400);
         } else {
             System.out.println("Ingrese un numero valido!");
         }
@@ -396,8 +397,10 @@ public class Menu {
         destino = sc.nextInt();
         if (destino == 1) {
             tk.setDestino(Ciudad.MONTEVIDEO);
+            tk.setDistancia(1190);
         } else if (destino == 2) {
             tk.setDestino(Ciudad.SANTIAGO);
+            tk.setDistancia(1050);
         } else {
             System.out.println("Ingrese un numero valido!");
         }
@@ -483,7 +486,6 @@ public class Menu {
         int numerosVuelos = -1;
         Boolean validado = false;
         int avionSeleccionado = -1;
-        Bronze avionBronze = new Bronze();
 
         System.out.println("Ingrese categoria de Avion");
         System.out.println("1: Gold");
@@ -494,38 +496,48 @@ public class Menu {
         avionSeleccionado = scanner.nextInt();
         if (avionSeleccionado == 1) {
             Gold avionGold = new Gold();
+            List<Gold> listaDisponibles = avionGold.leerArchivo();
+            for (Flota _avion : listaDisponibles) {
+                if (_avion.getFechas().equals(tk.getFecha())) {
+                    boolean capacidad = acompañantes(_avion, tk);
+                    if (capacidad == true) {
+                        tk.setNumeroDeAvion(_avion.getNumeroAvion());
+                        tk.setPrecio(avionGold.precioVuelo(tk));
+                        avion = _avion;
+                    }
+                }
+            }
+        } else if (avionSeleccionado == 2) {
+            Silver avionSilver = new Silver();
+            List<Silver> listaDisponibles = avionSilver.leerArchivo();
+            for (Flota _avion : listaDisponibles) {
+                if (_avion.getFechas().equals(tk.getFecha())) {
+                    boolean capacidad = acompañantes(_avion, tk);
+                    if (capacidad == true) {
+                        tk.setNumeroDeAvion(_avion.getNumeroAvion());
+                        tk.setPrecio(avionSilver.precioVuelo(tk));
+                        avion = _avion;
+                    }
+                }
+            }
+        } else if (avionSeleccionado == 3) {
+            Bronze avionBronze = new Bronze();
             List<Bronze> listaDisponibles = avionBronze.leerArchivo();
             for (Flota _avion : listaDisponibles) {
                 if (_avion.getFechas().equals(tk.getFecha())) {
                     boolean capacidad = acompañantes(_avion, tk);
                     if (capacidad == true) {
                         tk.setNumeroDeAvion(_avion.getNumeroAvion());
+                        tk.setPrecio(avionBronze.precioVuelo(tk));
                         avion = _avion;
                     }
                 }
             }
-            //validado = avionGold.mostrarAvionesDisponibles(tk);
-        } else if (avionSeleccionado == 2) {
-            Silver avionSilver = new Silver();
-            //validado = avionSilver.mostrarAvionesDisponibles(tk);
-        } else if (avionSeleccionado == 3) {
-            //validado = avionBronze.mostrarAvionesDisponibles(tk);
-        } else {
-            System.out.println("¡¡Opcion correcta, volviendo al menu!!");
-        }
-        /*if (validado) {
-            do {
-                opcionVuelo = scVuelo.nextInt();
-                if (){//!numerosVuelos.contains(opcionVuelo)) {
-                    System.out.println("Ingrese un valor valido");
-                }
-            } while (!numerosVuelos.contains(opcionVuelo));
-            listaAviones.get(opcionVuelo).addDate(tk.getFecha());
-            avion = listaAviones.get(opcionVuelo);
-        } else {
-            avion = null;
-        }*/
+        } else if (avionSeleccionado == 0) {
 
+        } else {
+            System.out.println("¡¡Opcion incorrecta, volviendo al menu!!");
+        }
         return avion;
     }//devuelve el avion que fue elegido para viajar o null si no se pudo cargar
 
