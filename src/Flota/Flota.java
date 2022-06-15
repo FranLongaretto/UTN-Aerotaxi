@@ -1,5 +1,7 @@
 package Flota;
 
+import java.util.UUID;
+
 public abstract class Flota {
     private String capacidad_combustible = "10000";
     private float costoServicio = 150f;
@@ -7,8 +9,7 @@ public abstract class Flota {
     private float velMax = 300f;
     private TipoPropulsion propulsion = TipoPropulsion.HELICE;
     private int tarifaFija;
-    private int numeroAvion = 0;
-    private static int numero = 0;
+    private UUID numeroAvion = UUID.randomUUID();
     public Flota() {
     }
 
@@ -18,18 +19,15 @@ public abstract class Flota {
         this.cantMaxPasajeros = cantMaxPasajeros;
         this.velMax = velMax;
         this.propulsion = propulsion;
-        this.numeroAvion = setNumeroAvion();
+        this.numeroAvion = UUID.randomUUID();
     }
 
-    public int getNumeroAvion() {
+    public UUID getNumeroAvion() {
         return numeroAvion;
     }
 
-    public int setNumeroAvion() {
-        this.numeroAvion =  numero;
-        numero++;
-
-        return numeroAvion;
+    public void setNumeroAvion(UUID numeroAvion) {
+        this.numeroAvion = numeroAvion;
     }
 
     public String getCapacidad_combustible() {
@@ -78,5 +76,17 @@ public abstract class Flota {
 
     public int getTarifaFija() {
         return tarifaFija;
+    }
+
+    @Override
+    public String toString() {
+        return "----------------------\n" +
+                "\nNumero de Avion = " + numeroAvion +
+                "\nCapacidad de combustible = " + capacidad_combustible +
+                "\nCosto de servicio = " + costoServicio +
+                "\nCantidad maxima de pasajeros = " + cantMaxPasajeros +
+                "\nVelocidad maxima = " + velMax +
+                "\nPropulsion = " + propulsion +
+                "\nTarifa Fija = " + tarifaFija;
     }
 }
