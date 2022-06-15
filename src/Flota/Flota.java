@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public abstract class Flota {
-    private HashSet<LocalDate> fechas;
+    private LocalDate fechas;
     private String capacidad_combustible = "10000";
     private float costoServicio = 150f;
     private int cantMaxPasajeros = 100;
@@ -49,17 +49,11 @@ public abstract class Flota {
         this.capacidad_combustible = capacidad_combustible;
     }
 
-    public HashSet<LocalDate> getFechas() {
+    public LocalDate getFechas() {
         return fechas;
     }
-    public void setFechas(HashSet<LocalDate> fechas) {
+    public void setFechas(LocalDate fechas) {
         this.fechas = fechas;
-    }
-    public void addDate(LocalDate date){
-        this.fechas.add(date);
-    }
-    public void removeDate(LocalDate date){
-        this.fechas.remove(date);
     }
     public float getCostoServicio() {
         return costoServicio;

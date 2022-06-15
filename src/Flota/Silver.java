@@ -105,7 +105,7 @@ public class Silver extends Flota implements Archivos<Silver> {
             try{
                 List<Silver> listaAvionesSilver = Arrays.asList(mapper.readValue(fileSilver, Silver[].class)); //Convierto Json array a list de objetos
                 for (Silver avion: listaAvionesSilver) {
-                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= (tk.getPasajeros() + avion.getPasajerosAbordo())){
+                    if (avion.getFechas().equals(fechaTk) && avion.getCantMaxPasajeros() >= (tk.getPasajeros() + avion.getPasajerosAbordo())){
                         System.out.println(i + ":" + avion);
                         validacion = true;
                         //i++;
