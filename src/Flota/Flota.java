@@ -99,7 +99,7 @@ public abstract class Flota {
     @Override
     public String toString() {
         return "----------------------\n" +
-                "\n\t---Numero de Avion--- = " + "'"+numeroAvion+"'" +
+                "\nNumero de Avion = " + "'"+numeroAvion+"'" +
                 "\nCapacidad de combustible = " + capacidad_combustible +
                 "\nCosto de servicio = " + costoServicio +
                 "\nCantidad maxima de pasajeros = " + cantMaxPasajeros +

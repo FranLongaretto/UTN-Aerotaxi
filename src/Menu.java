@@ -283,6 +283,7 @@ public class Menu {
                     break;
                 case 3:
                     //mostrar reservas
+                    mostrarReservasUsuario(user);
                     break;
                 case 0:
                     System.out.println("Volviendo al menu pricipal.");
@@ -409,7 +410,6 @@ public class Menu {
     }
 
     public void mostrarFechas() {
-
         Gold gold = new Gold();
         ArrayList<Gold> goldArrayList = new ArrayList<Gold>(gold.leerArchivo());
         Silver silver = new Silver();
@@ -470,7 +470,6 @@ public class Menu {
             avion.setPasajerosAbordo(avion.getPasajerosAbordo() + cantidad);
             tk.setPasajeros(cantidad);
             aux = true;
-            System.out.println(avion.toString());
         } else {
             System.out.println("Ya no queda espacio en el avion.");
         }
@@ -544,6 +543,16 @@ public class Menu {
     private void agregarTkALista(Ticket tk) {
         this.listaTicket.add(tk);
     }
+
+    public void mostrarReservasUsuario(Usuario user) {
+        Ticket tk = new Ticket();
+        ArrayList<Ticket> ticketArrayList = new ArrayList<Ticket>(tk.leerArchivo());
+        for (Ticket ticket : ticketArrayList) {
+            if (user.getDni().equals(ticket.getUsuarioDni())) {
+                System.out.println(ticket);
+            }
+        }
+    }
     //endregion
 
     //region ----- ADMIN -----
@@ -563,7 +572,7 @@ public class Menu {
                 respuesta = (int) scanner.nextInt();
                 switch (respuesta) {
                     case 1: //Ver Listado de vuelos por fecha especifica
-                        mostrarVuelosXFecha();
+                        mostrarVuelosXFecha(fechaDeVuelo());
                         break;
                     case 2: //Ver Listado de clientes
                         Usuario usuarios = new Usuario();
@@ -745,23 +754,38 @@ public class Menu {
         System.out.println("0: Salir al menu admin");
     }
 
-    public void mostrarVuelosXFecha() {
-        LocalDate fecha;
-        System.out.println("Ingrese el año.\n");
-        int año = ingreseUnNumero();
-        System.out.println("Ingrese el mes.\n");
-        int mes = ingreseUnNumero();
-        System.out.println("Ingrese el dia.\n");
-        int dia = ingreseUnNumero();
-        fecha = LocalDate.of(año, mes, dia);
+    public void mostrarVuelosXFecha(LocalDate fecha) {
+        Gold gold = new Gold();
+        ArrayList<Gold> goldArrayList = new ArrayList<Gold>(gold.leerArchivo());
+        Silver silver = new Silver();
+        ArrayList<Silver> silverArrayList = new ArrayList<Silver>(silver.leerArchivo());
+        Bronze bronze = new Bronze();
+        ArrayList<Bronze> bronzesArrayList = new ArrayList<Bronze>(bronze.leerArchivo());
 
-        if (listaTicket != null) {//ver que esta pasando
-            System.out.println("---" + fecha + "---\n");
-            for (Ticket ticket : listaTicket) {
-                if (ticket.getFecha().equals(fecha)) {
-                    System.out.println(ticket.toString());
-                } else {
-                    System.out.println("Actualmente no hay vuelos para la fecha especificada");
+
+        if (goldArrayList != null) {
+            for (Gold avion : goldArrayList) {
+                if (avion.getFechas().equals(fecha)) {
+                    System.out.println("Fechas aviones GOLD");
+                    System.out.println(avion);
+                }
+            }
+        }
+
+        if (silverArrayList != null) {
+            for (Silver avion : silverArrayList) {
+                if (avion.getFechas().equals(fecha)) {
+                    System.out.println("Fechas aviones SILVER");
+                    System.out.println(avion);
+                }
+            }
+        }
+
+        if (bronzesArrayList != null) {
+            for (Bronze avion : bronzesArrayList) {
+                if (avion.getFechas().equals(fecha)) {
+                    System.out.println("Fechas aviones BRONZE");
+                    System.out.println(avion);
                 }
             }
         }
