@@ -322,6 +322,8 @@ public class Menu {
     public Ticket menuOrigen(Ticket tk) {
         int opcion = -1;
         int destino = -1;
+
+        //
         Scanner scanerOigen = new Scanner(System.in);
         Scanner scanerDesino = new Scanner(System.in);
         System.out.println("Ingrese la ciudad de origen:\n");
