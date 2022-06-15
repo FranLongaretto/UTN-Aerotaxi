@@ -320,8 +320,8 @@ public class Menu {
     }
 
     public Ticket menuOrigen(Ticket tk) {
-        int opcion = 0;
-        int destino = 0;
+        int opcion = -1;
+        int destino = -1;
         Scanner scanerOigen = new Scanner(System.in);
         Scanner scanerDesino = new Scanner(System.in);
         System.out.println("Ingrese la ciudad de origen:\n");
@@ -408,7 +408,7 @@ public class Menu {
     private Flota seleccionarAvion(Ticket tk) {
         Scanner scanner = new Scanner(System.in);
         Scanner scVuelo = new Scanner(System.in);
-        Flota avion;
+        Flota avion = null;
         int opcionVuelo;
         int numerosVuelos = -1;
         Boolean validado = false;
@@ -426,10 +426,10 @@ public class Menu {
             avionSeleccionado = scanner.nextInt();
             if (avionSeleccionado == 1) {
                 Gold avionGold = new Gold();
-                numerosVuelos = avionGold.mostrarAvionesDisponibles(tk);
+                validado = avionGold.mostrarAvionesDisponibles(tk);
             } else if (avionSeleccionado == 2) {
                 Silver avionSilver = new Silver();
-                numerosVuelos = avionSilver.mostrarAvionesDisponibles(tk);
+                validado = avionSilver.mostrarAvionesDisponibles(tk);
             } else if (avionSeleccionado == 3) {
                 validado = avionBronze.mostrarAvionesDisponibles(tk);
             } else {

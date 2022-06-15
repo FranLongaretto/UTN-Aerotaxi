@@ -19,8 +19,8 @@ public class Gold extends Flota implements Archivos<Gold> {
     public Gold() {
     }
 
-    public Gold(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion) {
-        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion);
+    public Gold(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion,int pasajerosAbordo) {
+        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion, pasajerosAbordo);
         setTarifaFija(6000);
         wifi = true;
         catering = true;
@@ -105,20 +105,24 @@ public class Gold extends Flota implements Archivos<Gold> {
             System.out.println("El archivo esta vacio");
         }
     }
-    public HashSet mostrarAvionesDisponibles(Ticket tk) {
+    public boolean mostrarAvionesDisponibles(Ticket tk) {
         File fileGold = new File("AvionesGold.json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         HashSet<Integer> numerosVuelos = new HashSet<>();
+        boolean validacion = false;
         int i = 0;
         LocalDate fechaTk = tk.getFecha();
         if(fileGold.exists()) {
             try{
                 List<Gold> listaAvionesGold = Arrays.asList(mapper.readValue(fileGold, Gold[].class)); //Convierto Json array a list de objetos
                 for (Gold avion: listaAvionesGold) {
-                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= tk.getPasajeros()){
+                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= (tk.getPasajeros() + avion.getPasajerosAbordo())){
                         System.out.println(i + ":" + avion);
-                        i++;
+                        validacion = true;
+                        //i++;
+                    }else{
+                        System.out.println("No hay aviones disponibles para la fecha o cantidad de pasajeros seleccionada.");
                     }
                 }
             } catch (IOException e) {
@@ -127,7 +131,7 @@ public class Gold extends Flota implements Archivos<Gold> {
         }else{
             System.out.println("El archivo esta vacio");
         }
-        return numerosVuelos;
+        return validacion;
     }
     @Override
     public void sobreEscribirArchivo(ArrayList listaArch) {
