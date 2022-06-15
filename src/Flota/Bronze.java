@@ -1,21 +1,23 @@
 package Flota;
 
 import Interfaces.Archivos;
-import Usuario.Usuario;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
+import Ticket.Ticket;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class Bronze extends Flota implements Archivos<Bronze> {
     public Bronze() {
+        super();
+        setTarifaFija(3000);
     }
-
     public Bronze(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion){
         super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion);
         setTarifaFija(3000);
@@ -25,7 +27,6 @@ public class Bronze extends Flota implements Archivos<Bronze> {
     public String toString() {
         return super.toString() + "\n";
     }
-
     @Override
     public List<Bronze> leerArchivo() {
         List<Bronze> listaAvionesBronze = null;
@@ -79,7 +80,30 @@ public class Bronze extends Flota implements Archivos<Bronze> {
             System.out.println("El archivo esta vacio");
         }
     }
-
+    public HashSet mostrarAvionesDisponibles(Ticket tk) {
+        File fileBronze = new File("AvionesBronze.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        HashSet<Integer> numerosVuelos = new HashSet<>();
+        int i = 0;
+        LocalDate fechaTk = tk.getFecha();
+        if(fileBronze.exists()) {
+            try{
+                List<Bronze> listaAvionesBronze = Arrays.asList(mapper.readValue(fileBronze, Bronze[].class)); //Convierto Json array a list de objetos
+                for (Bronze avion: listaAvionesBronze) {
+                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= tk.getPasajeros()){
+                        System.out.println(i + ":" + avion);
+                        i++;
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Error!!");
+            }
+        }else{
+            System.out.println("El archivo esta vacio");
+        }
+        return numerosVuelos;
+    }
     @Override
     public void sobreEscribirArchivo(ArrayList listaArch) {
         File fileUsuarios = new File("AvionesBronze.json");
@@ -91,5 +115,4 @@ public class Bronze extends Flota implements Archivos<Bronze> {
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -1,11 +1,15 @@
 package Ticket;
 
+import Interfaces.Archivos;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.*;
 
-public class Ticket {
-
+public class Ticket implements Archivos<Ticket> {
     private LocalDate fecha;
     private Ciudad origen;
     private Ciudad destino;
@@ -14,7 +18,7 @@ public class Ticket {
     private int distancia;
     private String usuarioDni;
     private boolean cancelarTicket;
-    private String numeroDeAvion;
+    private UUID numeroDeAvion;
 
     public Ticket() {
     }
@@ -24,7 +28,7 @@ public class Ticket {
         this.origen = origen;
         this.destino = destino;
         this.pasajeros = pasajeros;
-        this.numeroDeAvion = numeroDeAvion;
+        this.numeroDeAvion = UUID.randomUUID();
         this.usuarioDni = usuarioDni;
         this.setDistnacia();
         this.setPrecio();
@@ -91,8 +95,12 @@ public class Ticket {
         this.cancelarTicket = cancelarTicket;
     }
 
-    public String getNumeroDeAvion() {
+    public UUID getNumeroDeAvion() {
         return numeroDeAvion;
+    }
+
+    public void setNumeroDeAvion(UUID numeroDeAvion) {
+        this.numeroDeAvion = numeroDeAvion;
     }
 
     public int getDistancia(){return this.distancia;}
@@ -119,9 +127,85 @@ public class Ticket {
         } else {
             this.distancia = 1050;
         }
-
-
     }
 
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "fecha=" + fecha +
+                ", origen=" + origen +
+                ", destino=" + destino +
+                ", pasajeros=" + pasajeros +
+                ", precio=" + precio +
+                ", distancia=" + distancia +
+                ", usuarioDni='" + usuarioDni + '\'' +
+                ", cancelarTicket=" + cancelarTicket +
+                ", numeroDeAvion=" + numeroDeAvion +
+                '}';
+    }
 
+    @Override
+    public List<Ticket> leerArchivo() {
+        List<Ticket> listaTicket = null;
+        File fileTickets = new File("Tickets.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        if (fileTickets.exists() && fileTickets.canRead()) {
+            try {
+                listaTicket = Arrays.asList(mapper.readValue(fileTickets, Ticket[].class)); //Convierto Json array a list de Tickets
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.printf("El archivo no existe\n");
+        }
+        return listaTicket;
+    }
+    @Override
+    public void agregarEnArchivo() {
+        File fileTicket = new File("Tickets.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            //Pregunto si el archivo existe
+            if (fileTicket.createNewFile()) {
+                ArrayList<Ticket> TicketArrayList = new ArrayList<>();
+                TicketArrayList.add(this);
+                mapper.writeValue(fileTicket, TicketArrayList);
+            } else {
+                ArrayList<Ticket> TicketArrayList = new ArrayList<Ticket>(leerArchivo());
+                TicketArrayList.add(this);
+                mapper.writeValue(fileTicket, TicketArrayList);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public void mostrarArchivo() {
+        File fileTicket = new File("Tickets.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        if (fileTicket.exists()) {
+            try {
+                List<Ticket> listaTicket = Arrays.asList(mapper.readValue(fileTicket, Ticket[].class)); //Convierto Json array a list de objetos
+                listaTicket.stream().forEach(obj -> System.out.println(obj)); // Mostrar lista de Ticket
+            } catch (IOException e) {
+                System.out.println("Error!!");
+            }
+        } else {
+            System.out.println("El archivo esta vacio");
+        }
+    }
+    @Override
+    public void sobreEscribirArchivo(ArrayList listaArch) {
+        File fileUsuarios = new File("AvionesGold.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            mapper.writeValue(fileUsuarios, listaArch);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
