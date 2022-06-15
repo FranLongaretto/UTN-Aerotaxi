@@ -19,8 +19,8 @@ public class Gold extends Flota implements Archivos<Gold> {
     public Gold() {
     }
 
-    public Gold(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion,int pasajerosAbordo) {
-        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion, pasajerosAbordo);
+    public Gold(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion) {
+        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion);
         setTarifaFija(6000);
         wifi = true;
         catering = true;
