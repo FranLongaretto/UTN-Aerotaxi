@@ -436,6 +436,7 @@ public class Menu {
                         usuarios.mostrarArchivo();
                         break;
                     case 3: //Ver Listado de aviones
+                            verListaAviones();
                         break;
                     case 4: //Agregar aviones
                         agregarAviones();
@@ -452,6 +453,33 @@ public class Menu {
 
             } catch (NoSuchElementException e) {//sino capturo el error y lo gestiono
                 System.out.println("Error");//volver a pedirle que ingrese bien el dato
+            }
+        }
+    }
+
+    private void verListaAviones() {
+        int opcion = 5;
+        Bronze bronze = new Bronze();
+        Silver silver = new Silver();
+        Gold gold = new Gold();
+        while (opcion != 0) {
+            Scanner scanner = new Scanner(System.in);
+            OpcionesAviones();
+            opcion = scanner.nextInt();
+            switch (opcion) {
+                case 1: //Agregar avion BRONZE
+                    bronze.mostrarArchivo();
+                    break;
+                case 2: //Agregar avion SILVER
+                    silver.mostrarArchivo();
+                    break;
+                case 3: //Agregar avion GOLD
+                    gold.mostrarArchivo();
+                    break;
+                case 0: //Salir menu admin
+                    adminMenu();
+                default:
+                    System.out.println("Ingrese una opcion valida.");
             }
         }
     }
@@ -536,23 +564,24 @@ public class Menu {
 
     public void agregarBronce(){
         Bronze bronze = new Bronze();
-
-
+        bronze.agregarEnArchivo();
     }
 
     public void agregarSilver(){
-
+        Silver silver = new Silver();
+        silver.agregarEnArchivo();
     }
 
     public void agregarGold(){
-
+        Gold gold = new Gold();
+        gold.agregarEnArchivo();
     }
 
     private void OpcionesAviones(){
-        System.out.println("\tAgregar Tipo de Gold");
-        System.out.println("1: Gold BRONZE");
-        System.out.println("2: Gold SILVER");
-        System.out.println("3: Gold GOLD");
+        System.out.println("\tTipo de avion");
+        System.out.println("1: Avion BRONZE");
+        System.out.println("2: Avion SILVER");
+        System.out.println("3: Avion GOLD");
         System.out.println("0: Salir al menu admin");
     }
     //endregion

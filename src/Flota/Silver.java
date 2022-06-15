@@ -31,6 +31,13 @@ public class Silver extends Flota implements Archivos<Silver> {
     }
 
     @Override
+    public String toString() {
+        return super.toString() +
+                "\nCatering = " + catering +
+                "\n";
+    }
+
+    @Override
     public List<Silver> leerArchivo() {
         List<Silver> listaAvionesSilver = null;
         File fileSilver = new File("AvionesSilver.json");

@@ -20,6 +20,12 @@ public class Bronze extends Flota implements Archivos<Bronze> {
         super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion);
         setTarifaFija(3000);
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "\n";
+    }
+
     @Override
     public List<Bronze> leerArchivo() {
         List<Bronze> listaAvionesBronze = null;
