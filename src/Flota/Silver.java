@@ -19,8 +19,8 @@ public class Silver extends Flota implements Archivos<Silver> {
     public Silver() {
     }
 
-    public Silver(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion,int pasajerosAbordo){
-        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion,pasajerosAbordo);
+    public Silver(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion){
+        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion);
         setTarifaFija(4000);
         catering = true;
     }

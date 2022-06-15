@@ -18,8 +18,8 @@ public class Bronze extends Flota implements Archivos<Bronze> {
         super();
         setTarifaFija(3000);
     }
-    public Bronze(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion, int pasajerosAbordo){
-        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion, pasajerosAbordo);
+    public Bronze(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion){
+        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion);
         setTarifaFija(3000);
     }
 

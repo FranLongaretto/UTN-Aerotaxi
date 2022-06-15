@@ -9,7 +9,7 @@ public abstract class Flota {
     private String capacidad_combustible = "10000";
     private float costoServicio = 150f;
     private int cantMaxPasajeros = 100;
-    private static int pasajerosAbordo = 0;
+    private int pasajerosAbordo = 0;
     private float velMax = 300f;
     private TipoPropulsion propulsion = TipoPropulsion.HELICE;
     private int tarifaFija;
@@ -17,20 +17,20 @@ public abstract class Flota {
     public Flota() {
     }
 
-    public Flota(String capacidad_combustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion, int cantPasajeros) {
+    public Flota(String capacidad_combustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion) {
         this.capacidad_combustible = capacidad_combustible;
         this.costoServicio = costoServicio;
         this.cantMaxPasajeros = cantMaxPasajeros;
         this.velMax = velMax;
         this.propulsion = propulsion;
         this.numeroAvion = UUID.randomUUID();
-        this.pasajerosAbordo = getPasajerosAbordo() + cantPasajeros;
+        //this.pasajerosAbordo += cantPasajeros;//
     }
     public int getPasajerosAbordo() {
         return pasajerosAbordo;
     }
     public void setPasajerosAbordo(int pasajerosAbordo) {
-        this.pasajerosAbordo = pasajerosAbordo;
+        this.pasajerosAbordo += pasajerosAbordo;
     }
 
     public UUID getNumeroAvion() {

@@ -265,13 +265,16 @@ public class Menu {
                 case 1:
                     tk = generarTicket(user);
                     if (tk != null) {
+                        System.out.println(tk.toString());
                         agregarTkALista(tk);
                         tk.agregarEnArchivo();
-                        //falta agregar fecha de vuelo al avion
+                        tk.mostrarArchivo();
+
                         //Se podria corroborar la mejor categoria del usuario
                         //Se tiene que guardar el precio del tk.= (funcion que lo devuelva)
                     } else {
                         //el usuario deberia ingresar otra fecha o salir al menu principal
+                        System.out.println("Fecha o capacidad del avion invalida, Por favor vuelva a ingresar los datos");
                     }
                     //guardar datos al usuario (total gastado)
                     break;
@@ -298,26 +301,26 @@ public class Menu {
 
         ticket.setUsuarioDni(user.getDni());
         ticket = menuOrigen(ticket);
-        ticket.setPasajeros(acompañantes());
+        //ticket.setPasajeros(acompañantes());
         mostrarFechas();
-        ticket.setFecha(fechaDeVuelo()); //generar funcion que me diga si esta disponible la ffecha sino que elija otra
+        ticket.setFecha(fechaDeVuelo());
         avionAux = seleccionarAvion(ticket);
 
+        if (avionAux == null) {
+            //ticket.setNumeroDeAvion(seleccionarAvion(ticket).getNumeroAvion());
+            //devuelve al menu
+            ticket = null;
 
-        while (avionAux == null || opcion == 0) {
-
-            if (avionAux == null) {
-                //ticket.setNumeroDeAvion(seleccionarAvion(ticket).getNumeroAvion());
-                //pedirle que ingrese otra fecha o cantidad de pasajeros
-            } else {
-                //termino de generar ticket y genero el pago
-            }
-
+        } else {
+            //termino de generar ticket y genero el pago
         }
+
+/*
         System.out.println(ticket.toString());
         System.out.println("Los datos son correctos? 1 por si / 0 por no");
         opcion = sc.nextInt();
         if (opcion != 1) ticket = null;
+*/
         return ticket;
     }
 
@@ -403,6 +406,7 @@ public class Menu {
     }
 
     public void mostrarFechas() {
+
         Gold gold = new Gold();
         ArrayList<Gold> goldArrayList = new ArrayList<Gold>(gold.leerArchivo());
         Silver silver = new Silver();
@@ -410,22 +414,22 @@ public class Menu {
         Bronze bronze = new Bronze();
         ArrayList<Bronze> bronzesArrayList = new ArrayList<Bronze>(bronze.leerArchivo());
 
-        if (goldArrayList != null){
-            for (Gold avion: goldArrayList) {
+        if (goldArrayList != null) {
+            for (Gold avion : goldArrayList) {
                 System.out.println("Fechas aviones GOLD");
                 System.out.println(avion.getFechas());
             }
         }
 
-        if(silverArrayList != null){
-            for (Silver avion: silverArrayList) {
+        if (silverArrayList != null) {
+            for (Silver avion : silverArrayList) {
                 System.out.println("Fechas aviones SILVER");
                 System.out.println(avion.getFechas());
             }
         }
 
-        if (bronzesArrayList != null){
-            for (Bronze avion: bronzesArrayList) {
+        if (bronzesArrayList != null) {
+            for (Bronze avion : bronzesArrayList) {
                 System.out.println("Fechas aviones BRONZE");
                 System.out.println(avion.getFechas());
             }
@@ -452,14 +456,24 @@ public class Menu {
         return numero;
     }
 
-    private int acompañantes() {
+    private boolean acompañantes(Flota avion, Ticket tk) {
         Scanner scanner = new Scanner(System.in);
         int cantidad = 1;
+        boolean aux = false;
+
         System.out.println("Ingrese la cantidad de acompañantes");
         cantidad += scanner.nextInt();
+        if (avion.getCantMaxPasajeros() >= (avion.getPasajerosAbordo() + cantidad)) {
+            avion.setPasajerosAbordo(avion.getPasajerosAbordo() + cantidad);
+            tk.setPasajeros(cantidad);
+            aux = true;
+            System.out.println(avion.toString());
+        } else {
+            System.out.println("Ya no queda espacio en el avion.");
+        }
         //validar si entran en el avion
-        return cantidad;
-    }
+        return aux;
+    }//devuelve false si no quedan espacios en el avion
 
     private Flota seleccionarAvion(Ticket tk) {
         Scanner scanner = new Scanner(System.in);
@@ -477,38 +491,28 @@ public class Menu {
         System.out.println("3: Bronze");
         System.out.println("0: Para salir del sistema.");
 
-        while (avionSeleccionado != 0) {//chequear---------------------------------------------------
-
-            avionSeleccionado = scanner.nextInt();
-            if (avionSeleccionado == 1) {
-                Gold avionGold = new Gold();
-                validado = avionGold.mostrarAvionesDisponibles(tk);
-            } else if (avionSeleccionado == 2) {
-                Silver avionSilver = new Silver();
-                validado = avionSilver.mostrarAvionesDisponibles(tk);
-            } else if (avionSeleccionado == 3) {
-                validado = avionBronze.mostrarAvionesDisponibles(tk);
-            } else {
-                System.out.println("Ingrese una opcion correcta");
-            }
-        }
-
-        if (validado) {
-            System.out.println("\nIngrese el numero de avion en el que desea viajar");
-            numerosVuelos = scVuelo.nextInt();
-
+        avionSeleccionado = scanner.nextInt();
+        if (avionSeleccionado == 1) {
+            Gold avionGold = new Gold();
             List<Bronze> listaDisponibles = avionBronze.leerArchivo();
-
             for (Flota _avion : listaDisponibles) {
-                if (_avion.getNumeroAvion().equals(numerosVuelos)) {
-
+                if (_avion.getFechas().equals(tk.getFecha())) {
+                    boolean capacidad = acompañantes(_avion, tk);
+                    if (capacidad == true) {
+                        tk.setNumeroDeAvion(_avion.getNumeroAvion());
+                        avion = _avion;
+                    }
                 }
-
             }
-
-
+            //validado = avionGold.mostrarAvionesDisponibles(tk);
+        } else if (avionSeleccionado == 2) {
+            Silver avionSilver = new Silver();
+            //validado = avionSilver.mostrarAvionesDisponibles(tk);
+        } else if (avionSeleccionado == 3) {
+            //validado = avionBronze.mostrarAvionesDisponibles(tk);
+        } else {
+            System.out.println("¡¡Opcion correcta, volviendo al menu!!");
         }
-
         /*if (validado) {
             do {
                 opcionVuelo = scVuelo.nextInt();
@@ -523,7 +527,7 @@ public class Menu {
         }*/
 
         return avion;
-    }
+    }//devuelve el avion que fue elegido para viajar o null si no se pudo cargar
 
     private void agregarTkALista(Ticket tk) {
         this.listaTicket.add(tk);
@@ -739,15 +743,15 @@ public class Menu {
         int dia = ingreseUnNumero();
         fecha = LocalDate.of(año, mes, dia);
 
-        if (listaTicket != null) {
+        if (listaTicket != null) {//ver que esta pasando
             System.out.println("---" + fecha + "---\n");
             for (Ticket ticket : listaTicket) {
                 if (ticket.getFecha().equals(fecha)) {
                     System.out.println(ticket.toString());
+                } else {
+                    System.out.println("Actualmente no hay vuelos para la fecha especificada");
                 }
             }
-        } else {
-            System.out.println("Actualmente no hay vuelos");
         }
     }
     //endregion
