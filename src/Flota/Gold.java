@@ -117,7 +117,7 @@ public class Gold extends Flota implements Archivos<Gold> {
             try{
                 List<Gold> listaAvionesGold = Arrays.asList(mapper.readValue(fileGold, Gold[].class)); //Convierto Json array a list de objetos
                 for (Gold avion: listaAvionesGold) {
-                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= (tk.getPasajeros() + avion.getPasajerosAbordo())){
+                    if (avion.getFechas().equals(fechaTk) && avion.getCantMaxPasajeros() >= (tk.getPasajeros() + avion.getPasajerosAbordo())){
                         System.out.println(i + ":" + avion);
                         validacion = true;
                         //i++;

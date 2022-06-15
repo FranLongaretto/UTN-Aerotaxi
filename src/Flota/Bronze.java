@@ -92,7 +92,7 @@ public class Bronze extends Flota implements Archivos<Bronze> {
             try{
                 List<Bronze> listaAvionesBronze = Arrays.asList(mapper.readValue(fileBronze, Bronze[].class)); //Convierto Json array a list de objetos
                 for (Bronze avion : listaAvionesBronze){
-                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= (tk.getPasajeros() + avion.getPasajerosAbordo())){
+                    if (avion.getFechas().equals(fechaTk) && avion.getCantMaxPasajeros() >= (tk.getPasajeros() + avion.getPasajerosAbordo())){
                         System.out.println(avion.getNumeroAvion() + ":" + avion);//muestro cada avion con su numero de id
                         validacion = true;
                         //i++;

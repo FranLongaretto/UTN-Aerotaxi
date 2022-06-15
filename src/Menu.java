@@ -297,10 +297,12 @@ public class Menu {
         Flota avionAux;
 
         ticket.setUsuarioDni(user.getDni());
-        ticket.setFecha(fechaDeVuelo()); //generar funcion que me diga si esta disponible la ffecha sino que elija otra
         ticket = menuOrigen(ticket);
         ticket.setPasajeros(acompañantes());
+        mostrarFechas();
+        ticket.setFecha(fechaDeVuelo()); //generar funcion que me diga si esta disponible la ffecha sino que elija otra
         avionAux = seleccionarAvion(ticket);
+
 
         while (avionAux == null || opcion == 0) {
 
@@ -321,74 +323,126 @@ public class Menu {
 
     public Ticket menuOrigen(Ticket tk) {
         int opcion = -1;
-        int destino = -1;
 
-        //
-        Scanner scanerOigen = new Scanner(System.in);
-        Scanner scanerDesino = new Scanner(System.in);
+        Scanner scanerOrigen = new Scanner(System.in);
+        Scanner scanerDestino = new Scanner(System.in);
         System.out.println("Ingrese la ciudad de origen:\n");
-        System.out.println("1: Buenos Aires.\n");
-        System.out.println("2: Cordoba.\n");
-        System.out.println("3: Montevideo.\n");
-        System.out.println("0: Salir.\n");
-        while (opcion != 0) {
-            opcion = scanerOigen.nextInt();
-            switch (opcion) {
-                case 1:
-                    tk.setOrigen(Ciudad.BUENOSAIRES);
-                    System.out.println("Ingrese destino");
-                    System.out.println("1: Montevideo");
-                    System.out.println("2: Cordoba");
-                    System.out.println("3: Santiago");
-                    destino = scanerDesino.nextInt();
-                    if (destino == 1) {
-                        tk.setDestino(Ciudad.MONTEVIDEO);
-                    } else if (destino == 2) {
-                        tk.setDestino(Ciudad.CORDOBA);
-                    } else if (destino == 3) {
-                        tk.setDestino(Ciudad.SANTIAGO);
-                    } else {
-                        System.out.println("Ingrese un numero valido!");
-                    }
-                    break;
-                case 2:
-                    tk.setOrigen(Ciudad.CORDOBA);
-                    System.out.println("Ingrese destino");
-                    System.out.println("1: Montevideo");
-                    System.out.println("2: Santiago");
-                    destino = scanerDesino.nextInt();
-                    if (destino == 1) {
-                        tk.setDestino(Ciudad.MONTEVIDEO);
-                    } else if (destino == 2) {
-                        tk.setDestino(Ciudad.SANTIAGO);
-                    } else {
-                        System.out.println("Ingrese un numero valido!");
-                    }
-                    break;
-                case 3:
-                    tk.setOrigen(Ciudad.MONTEVIDEO);
-                    tk.setDestino(Ciudad.SANTIAGO);
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Ingrese un numero valido!");
-                    break;
-            }
+        System.out.println("1: Buenos Aires.");
+        System.out.println("2: Cordoba.");
+        System.out.println("3: Montevideo.");
+        System.out.println("0: Salir.");
+
+        opcion = scanerOrigen.nextInt();
+
+        switch (opcion) {
+            case 1:
+                tk.setOrigen(Ciudad.BUENOSAIRES);
+                tk = destinoBsAs(tk);
+                System.out.println(tk);
+                break;
+            case 2:
+                tk.setOrigen(Ciudad.CORDOBA);
+                tk = destinoCordoba(tk);
+                System.out.println(tk);
+                break;
+            case 3:
+                tk.setOrigen(Ciudad.MONTEVIDEO);
+                tk.setDestino(Ciudad.SANTIAGO);
+                System.out.println(tk);
+                break;
+            case 0:
+                break;
+            default:
+                System.out.println("Ingrese un numero valido!");
+                break;
         }
+
         return tk;
     }//selecciona origen y destino, devuelvo tk con esos datos
+
+    public Ticket destinoBsAs(Ticket tk) {
+        Scanner sc = new Scanner(System.in);
+        int destino;
+
+        System.out.println("Ingrese destino");
+        System.out.println("1: Montevideo");
+        System.out.println("2: Cordoba");
+        System.out.println("3: Santiago");
+
+        destino = sc.nextInt();
+        if (destino == 1) {
+            tk.setDestino(Ciudad.MONTEVIDEO);
+        } else if (destino == 2) {
+            tk.setDestino(Ciudad.CORDOBA);
+        } else if (destino == 3) {
+            tk.setDestino(Ciudad.SANTIAGO);
+        } else {
+            System.out.println("Ingrese un numero valido!");
+        }
+
+        return tk;
+    }
+
+    public Ticket destinoCordoba(Ticket tk) {
+        Scanner sc = new Scanner(System.in);
+        int destino;
+
+        System.out.println("Ingrese destino");
+        System.out.println("1: Montevideo");
+        System.out.println("2: Santiago");
+        destino = sc.nextInt();
+        if (destino == 1) {
+            tk.setDestino(Ciudad.MONTEVIDEO);
+        } else if (destino == 2) {
+            tk.setDestino(Ciudad.SANTIAGO);
+        } else {
+            System.out.println("Ingrese un numero valido!");
+        }
+
+        return tk;
+    }
+
+    public void mostrarFechas() {
+        Gold gold = new Gold();
+        ArrayList<Gold> goldArrayList = new ArrayList<Gold>(gold.leerArchivo());
+        Silver silver = new Silver();
+        ArrayList<Silver> silverArrayList = new ArrayList<Silver>(silver.leerArchivo());
+        Bronze bronze = new Bronze();
+        ArrayList<Bronze> bronzesArrayList = new ArrayList<Bronze>(bronze.leerArchivo());
+
+        if (goldArrayList != null){
+            for (Gold avion: goldArrayList) {
+                System.out.println("Fechas aviones GOLD");
+                System.out.println(avion.getFechas());
+            }
+        }
+
+        if(silverArrayList != null){
+            for (Silver avion: silverArrayList) {
+                System.out.println("Fechas aviones SILVER");
+                System.out.println(avion.getFechas());
+            }
+        }
+
+        if (bronzesArrayList != null){
+            for (Bronze avion: bronzesArrayList) {
+                System.out.println("Fechas aviones BRONZE");
+                System.out.println(avion.getFechas());
+            }
+        }
+    }
 
     public LocalDate fechaDeVuelo() {
 
         LocalDate fecha;
-        System.out.println("Ingrese el año en el que quiere viajar.\n");
+        System.out.println("Ingrese el año.");
         int año = ingreseUnNumero();
-        System.out.println("Ingrese el mes.\n");
+        System.out.println("Ingrese el mes.");
         int mes = ingreseUnNumero();
-        System.out.println("Ingrese el dia.\n");
+        System.out.println("Ingrese el dia.");
         int dia = ingreseUnNumero();
         fecha = LocalDate.of(año, mes, dia);
+
         return fecha;
     }
 
@@ -445,8 +499,8 @@ public class Menu {
 
             List<Bronze> listaDisponibles = avionBronze.leerArchivo();
 
-            for (Flota _avion : listaDisponibles){
-                if (_avion.getNumeroAvion().equals(numerosVuelos)){
+            for (Flota _avion : listaDisponibles) {
+                if (_avion.getNumeroAvion().equals(numerosVuelos)) {
 
                 }
 
@@ -628,17 +682,42 @@ public class Menu {
 
     public void agregarBronce() {
         Bronze bronze = new Bronze();
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Ingrese la cantidad de pasajeros");
+        int cantPasajeros = sc.nextInt();
+        bronze.setCantMaxPasajeros(cantPasajeros);
+
+        bronze.setFechas(fechaDeVuelo());
 
         bronze.agregarEnArchivo();
     }
 
     public void agregarSilver() {
         Silver silver = new Silver();
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Ingrese la cantidad de pasajeros");
+        int cantPasajeros = sc.nextInt();
+        silver.setCantMaxPasajeros(cantPasajeros);
+
+        silver.setFechas(fechaDeVuelo());
+
         silver.agregarEnArchivo();
     }
 
     public void agregarGold() {
         Gold gold = new Gold();
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Ingrese la cantidad de pasajeros");
+        int cantPasajeros = sc.nextInt();
+        gold.setCantMaxPasajeros(cantPasajeros);
+
+        gold.setFechas(fechaDeVuelo());
+
         gold.agregarEnArchivo();
     }
 
