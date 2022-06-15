@@ -139,17 +139,17 @@ public class Ticket implements Archivos<Ticket> {
 
     @Override
     public String toString() {
-        return "Ticket{" +
-                "fecha=" + fecha +
-                ", origen=" + origen +
-                ", destino=" + destino +
-                ", pasajeros=" + pasajeros +
-                ", precio=" + precio +
-                ", distancia=" + distancia +
-                ", usuarioDni='" + usuarioDni + '\'' +
-                ", cancelarTicket=" + cancelarTicket +
-                ", numeroDeAvion=" + numeroDeAvion +
-                '}';
+        return "----------------------\n" +
+                "\nFecha = " + fecha +
+                "\nOrigen = " + origen +
+                "\nDestino = " + destino +
+                "\nPasajeros = " + pasajeros +
+                "\nPrecio = " + precio +
+                "\nDistancia = " + distancia +
+                "\nDNI del pasajero = " + usuarioDni +
+                "\nCancelar Ticket = " + cancelarTicket +
+                "\nNumero de Avion = " + numeroDeAvion +
+                "\n";
     }
 
     @Override
