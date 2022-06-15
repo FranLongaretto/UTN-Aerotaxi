@@ -1,13 +1,16 @@
 package Flota;
 
 import Interfaces.Archivos;
+import Ticket.Ticket;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class Gold extends Flota implements Archivos<Gold> {
@@ -102,7 +105,30 @@ public class Gold extends Flota implements Archivos<Gold> {
             System.out.println("El archivo esta vacio");
         }
     }
-
+    public HashSet mostrarAvionesDisponibles(Ticket tk) {
+        File fileGold = new File("AvionesGold.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        HashSet<Integer> numerosVuelos = new HashSet<>();
+        int i = 0;
+        LocalDate fechaTk = tk.getFecha();
+        if(fileGold.exists()) {
+            try{
+                List<Gold> listaAvionesGold = Arrays.asList(mapper.readValue(fileGold, Gold[].class)); //Convierto Json array a list de objetos
+                for (Gold avion: listaAvionesGold) {
+                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= tk.getPasajeros()){
+                        System.out.println(i + ":" + avion);
+                        i++;
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Error!!");
+            }
+        }else{
+            System.out.println("El archivo esta vacio");
+        }
+        return numerosVuelos;
+    }
     @Override
     public void sobreEscribirArchivo(ArrayList listaArch) {
         File fileUsuarios = new File("AvionesGold.json");

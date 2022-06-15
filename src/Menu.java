@@ -1,20 +1,15 @@
-import Flota.Bronze;
-import Flota.Gold;
-import Flota.Silver;
-import Flota.TipoAvion;
-import Ticket.*;
+import Flota.*;
+import Ticket.Ciudad;
+import Ticket.Ticket;
 import Usuario.Usuario;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.*;
 
 public class Menu {
-    List<Usuario> miLista_Usuarios = new ArrayList<>();
+    private List<Usuario> miLista_Usuarios = new ArrayList<>();
+    private List<Flota> listaAviones = new ArrayList<>();
+    private List<Ticket> listaTicket = new ArrayList<>();
 
     //region ----- Menu -----
     public void inicio_menu() {
@@ -147,7 +142,6 @@ public class Menu {
             Scanner scanner = new Scanner(System.in);
             //Pattern patron = Pattern.compile("[0-9]");
             try {
-//________________________________________________________________________________________//
                 dni = scanner.nextLine();
                 auxNum = Integer.parseInt(dni);
                 if (dni.length() == 0)
@@ -258,9 +252,9 @@ public class Menu {
         System.out.println("3: Ver reservas.\n");
         System.out.println("0: Salir.\n");
     }
-
     public void menu_AeroTaxi(Usuario user) {
         Scanner scanner = new Scanner(System.in);
+        Ticket tk;
         int aux = 4;
         //todas las funciones para comprar un pasaje de avion
         do {
@@ -268,7 +262,17 @@ public class Menu {
             aux = scanner.nextInt();
             switch (aux) {
                 case 1:
-                    generarTicket(user);
+                    tk = generarTicket(user);
+                    if (tk != null) {
+                        agregarTkALista(tk);
+                        tk.agregarEnArchivo();
+                        //falta agregar fecha de vuelo al avion
+                        //Se podria corroborar la mejor categoria del usuario
+                        //Se tiene que guardar el precio del tk.= (funcion que lo devuelva)
+                    }else{
+                        //el usuario deberia ingresar otra fecha o salir al menu principal
+                    }
+                    //guardar datos al usuario (total gastado)
                     break;
                 case 2:
                     //funcion cancelar vuelo
@@ -284,7 +288,6 @@ public class Menu {
             }
         } while (aux != 0);
     }
-
     public Ticket menuOrigen(Ticket tk) {
         int opcion = 0;
         int destino = 0;
@@ -342,21 +345,27 @@ public class Menu {
         }
         return tk;
     }
-
-    public void generarTicket(Usuario user) {
+    public Ticket generarTicket(Usuario user) {
+        Scanner sc = new Scanner(System.in);
+        int opcion = 0;
         Ticket ticket = new Ticket();
+        Flota avionAux;
         ticket.setUsuarioDni(user.getDni());
         ticket.setFecha(fechaDeVuelo()); //generar funcion que me diga si esta disponible la ffecha sino que elija otra
         ticket = menuOrigen(ticket);
-        //seleccionar avion y chequear validacion.
-        boolean validacion = false;
-        while (!validacion) {
-            ticket.setPasajeros(acompañantes());
-            seleccionarAvion(ticket);
+        ticket.setPasajeros(acompañantes());
+        avionAux = seleccionarAvion(ticket);
+        if (avionAux != null){
+            ticket.setNumeroDeAvion(seleccionarAvion(ticket).getNumeroAvion());
+        }else {
+            System.out.println("No hay aviones disponibles");
         }
-        //costo total del vuelo y confimacion del usuario.
+        System.out.println(ticket.toString());
+        System.out.println("Los datos son correctos? 1 por si / 0 por no");
+        opcion = sc.nextInt();
+        if (opcion != 1) ticket = null;
+        return ticket;
     }
-
     public LocalDate fechaDeVuelo() {
         LocalDate fecha;
         System.out.println("Ingrese el año en el que quiere viajar.\n");
@@ -368,13 +377,11 @@ public class Menu {
         fecha = LocalDate.of(año, mes, dia);
         return fecha;
     }
-
     private int ingreseUnNumero() {
         Scanner scanner = new Scanner(System.in);
         int numero = scanner.nextInt();
         return numero;
     }
-
     private int acompañantes() {
         Scanner scanner = new Scanner(System.in);
         int cantidad = 1;
@@ -383,33 +390,50 @@ public class Menu {
         //validar si entran en el avion
         return cantidad;
     }
-
-    private void seleccionarAvion(Ticket tk) {
+    private Flota seleccionarAvion(Ticket tk) {
         Scanner scanner = new Scanner(System.in);
-        //funcion que te muestre aviones disponibles en fecha especifica
+        Scanner scVuelo = new Scanner(System.in);
+        Flota avion;
+        int opcionVuelo;
+        HashSet<Integer> numerosVuelos = null;
+        Boolean validado = false;
+
         int avionSeleccionado = 0;
         System.out.println("Ingrese categoria de Avion");
         System.out.println("1: Gold");
         System.out.println("2: Silver");
         System.out.println("3: Bronze");
         avionSeleccionado = scanner.nextInt();
-        mostrarAvionesDisponibles(tk, avionSeleccionado);
-    }
-
-    private void mostrarAvionesDisponibles(Ticket tk, int claseAvion) {
-
-        if (claseAvion == 1) {
+        if (avionSeleccionado == 3) {
             Bronze avionBronze = new Bronze();
-            avionBronze.mostrarArchivo();
-        } else if (claseAvion == 2) {
+            numerosVuelos = avionBronze.mostrarAvionesDisponibles(tk);
+        } else if (avionSeleccionado == 2) {
             Silver avionSilver = new Silver();
-            avionSilver.mostrarArchivo();
-        } else if (claseAvion == 3) {
+            numerosVuelos = avionSilver.mostrarAvionesDisponibles(tk);
+        } else if (avionSeleccionado == 1) {
             Gold avionGold = new Gold();
-            avionGold.mostrarArchivo();
+            numerosVuelos = avionGold.mostrarAvionesDisponibles(tk);
         } else {
             System.out.println("Ingrese una opcion correcta");
         }
+        System.out.println("\nSeleccione el numero de vuelo");
+        if(!numerosVuelos.isEmpty()){
+            do{
+                opcionVuelo = scVuelo.nextInt();
+                if(!numerosVuelos.contains(opcionVuelo)){
+                    System.out.println("Ingrese un valor valido");
+                }
+            }while (!numerosVuelos.contains(opcionVuelo));
+            listaAviones.get(opcionVuelo).addDate(tk.getFecha());
+            avion = listaAviones.get(opcionVuelo);
+        }else{
+            avion = null;
+        }
+
+        return avion;
+    }
+    private void agregarTkALista(Ticket tk){
+        this.listaTicket.add(tk);
     }
     //endregion
 
@@ -430,13 +454,14 @@ public class Menu {
                 respuesta = (int) scanner.nextInt();
                 switch (respuesta) {
                     case 1: //Ver Listado de vuelos por fecha especifica
+                        mostrarVuelosXFecha();
                         break;
                     case 2: //Ver Listado de clientes
                         Usuario usuarios = new Usuario();
                         usuarios.mostrarArchivo();
                         break;
                     case 3: //Ver Listado de aviones
-                            verListaAviones();
+                        verListaAviones();
                         break;
                     case 4: //Agregar aviones
                         agregarAviones();
@@ -564,6 +589,7 @@ public class Menu {
 
     public void agregarBronce(){
         Bronze bronze = new Bronze();
+
         bronze.agregarEnArchivo();
     }
 
@@ -583,6 +609,27 @@ public class Menu {
         System.out.println("2: Avion SILVER");
         System.out.println("3: Avion GOLD");
         System.out.println("0: Salir al menu admin");
+    }
+    public void mostrarVuelosXFecha(){
+        LocalDate fecha;
+        System.out.println("Ingrese el año.\n");
+        int año = ingreseUnNumero();
+        System.out.println("Ingrese el mes.\n");
+        int mes = ingreseUnNumero();
+        System.out.println("Ingrese el dia.\n");
+        int dia = ingreseUnNumero();
+        fecha = LocalDate.of(año, mes, dia);
+
+        if(listaTicket!= null) {
+            System.out.println("---"+fecha+"---\n");
+            for (Ticket ticket : listaTicket) {
+                if (ticket.getFecha().equals(fecha)) {
+                    System.out.println(ticket.toString());
+                }
+            }
+        }else {
+            System.out.println("Actualmente no hay vuelos");
+        }
     }
     //endregion
 }
