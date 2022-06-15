@@ -19,8 +19,8 @@ public class Silver extends Flota implements Archivos<Silver> {
     public Silver() {
     }
 
-    public Silver(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion){
-        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion);
+    public Silver(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion,int pasajerosAbordo){
+        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion,pasajerosAbordo);
         setTarifaFija(4000);
         catering = true;
     }
@@ -93,20 +93,24 @@ public class Silver extends Flota implements Archivos<Silver> {
             System.out.println("El archivo esta vacio");
         }
     }
-    public HashSet mostrarAvionesDisponibles(Ticket tk) {
+    public boolean mostrarAvionesDisponibles(Ticket tk) {
         File fileSilver = new File("AvionesSilver.json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         HashSet<Integer> numerosVuelos = new HashSet<>();
+        boolean validacion = false;
         int i = 0;
         LocalDate fechaTk = tk.getFecha();
         if(fileSilver.exists()) {
             try{
                 List<Silver> listaAvionesSilver = Arrays.asList(mapper.readValue(fileSilver, Silver[].class)); //Convierto Json array a list de objetos
                 for (Silver avion: listaAvionesSilver) {
-                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= tk.getPasajeros()){
+                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= (tk.getPasajeros() + avion.getPasajerosAbordo())){
                         System.out.println(i + ":" + avion);
-                        i++;
+                        validacion = true;
+                        //i++;
+                    }else{
+                        System.out.println("No hay aviones disponibles para la fecha o cantidad de pasajeros seleccionada.");
                     }
                 }
             } catch (IOException e) {
@@ -115,7 +119,7 @@ public class Silver extends Flota implements Archivos<Silver> {
         }else{
             System.out.println("El archivo esta vacio");
         }
-        return numerosVuelos;
+        return validacion;
     }
     @Override
     public void sobreEscribirArchivo(ArrayList listaArch) {
