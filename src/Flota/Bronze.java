@@ -18,8 +18,8 @@ public class Bronze extends Flota implements Archivos<Bronze> {
         super();
         setTarifaFija(3000);
     }
-    public Bronze(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion){
-        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion);
+    public Bronze(String capCombustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion, int pasajerosAbordo){
+        super(capCombustible, costoServicio, cantMaxPasajeros, velMax, propulsion, pasajerosAbordo);
         setTarifaFija(3000);
     }
 
@@ -80,20 +80,24 @@ public class Bronze extends Flota implements Archivos<Bronze> {
             System.out.println("El archivo esta vacio");
         }
     }
-    public HashSet mostrarAvionesDisponibles(Ticket tk) {
+    public boolean mostrarAvionesDisponibles(Ticket tk) {
         File fileBronze = new File("AvionesBronze.json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         HashSet<Integer> numerosVuelos = new HashSet<>();
+        boolean validacion = false;
         int i = 0;
         LocalDate fechaTk = tk.getFecha();
         if(fileBronze.exists()) {
             try{
                 List<Bronze> listaAvionesBronze = Arrays.asList(mapper.readValue(fileBronze, Bronze[].class)); //Convierto Json array a list de objetos
-                for (Bronze avion: listaAvionesBronze) {
-                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= tk.getPasajeros()){
-                        System.out.println(i + ":" + avion);
-                        i++;
+                for (Bronze avion : listaAvionesBronze){
+                    if (avion.getFechas().contains(fechaTk) && avion.getCantMaxPasajeros() >= (tk.getPasajeros() + avion.getPasajerosAbordo())){
+                        System.out.println(avion.getNumeroAvion() + ":" + avion);//muestro cada avion con su numero de id
+                        validacion = true;
+                        //i++;
+                    }else{
+                        System.out.println("No hay aviones disponibles para la fecha o cantidad de pasajeros seleccionada.");
                     }
                 }
             } catch (IOException e) {
@@ -102,7 +106,7 @@ public class Bronze extends Flota implements Archivos<Bronze> {
         }else{
             System.out.println("El archivo esta vacio");
         }
-        return numerosVuelos;
+        return validacion;
     }
     @Override
     public void sobreEscribirArchivo(ArrayList listaArch) {

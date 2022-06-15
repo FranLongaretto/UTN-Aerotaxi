@@ -9,6 +9,7 @@ public abstract class Flota {
     private String capacidad_combustible = "10000";
     private float costoServicio = 150f;
     private int cantMaxPasajeros = 100;
+    private static int pasajerosAbordo = 0;
     private float velMax = 300f;
     private TipoPropulsion propulsion = TipoPropulsion.HELICE;
     private int tarifaFija;
@@ -16,13 +17,20 @@ public abstract class Flota {
     public Flota() {
     }
 
-    public Flota(String capacidad_combustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion) {
+    public Flota(String capacidad_combustible, float costoServicio, int cantMaxPasajeros, float velMax, TipoPropulsion propulsion, int cantPasajeros) {
         this.capacidad_combustible = capacidad_combustible;
         this.costoServicio = costoServicio;
         this.cantMaxPasajeros = cantMaxPasajeros;
         this.velMax = velMax;
         this.propulsion = propulsion;
         this.numeroAvion = UUID.randomUUID();
+        this.pasajerosAbordo = getPasajerosAbordo() + cantPasajeros;
+    }
+    public int getPasajerosAbordo() {
+        return pasajerosAbordo;
+    }
+    public void setPasajerosAbordo(int pasajerosAbordo) {
+        this.pasajerosAbordo = pasajerosAbordo;
     }
 
     public UUID getNumeroAvion() {
@@ -96,10 +104,11 @@ public abstract class Flota {
     @Override
     public String toString() {
         return "----------------------\n" +
-                "\nNumero de Avion = " + numeroAvion +
+                "\n\t---Numero de Avion--- = " + "'"+numeroAvion+"'" +
                 "\nCapacidad de combustible = " + capacidad_combustible +
                 "\nCosto de servicio = " + costoServicio +
                 "\nCantidad maxima de pasajeros = " + cantMaxPasajeros +
+                "\nCantidad de pasajeros a bordo = " + pasajerosAbordo +
                 "\nVelocidad maxima = " + velMax +
                 "\nPropulsion = " + propulsion +
                 "\nTarifa Fija = " + tarifaFija;

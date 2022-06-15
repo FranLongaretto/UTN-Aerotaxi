@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Menu {
     private List<Usuario> miLista_Usuarios = new ArrayList<>();
-    private List<Flota> listaAviones = new ArrayList<>();
+    private List<Flota> listaAviones = new ArrayList<>();//guardar aviones que van a viajar con sus respectivas fechas
     private List<Ticket> listaTicket = new ArrayList<>();
 
     //region ----- Menu -----
@@ -252,6 +252,7 @@ public class Menu {
         System.out.println("3: Ver reservas.\n");
         System.out.println("0: Salir.\n");
     }
+
     public void menu_AeroTaxi(Usuario user) {
         Scanner scanner = new Scanner(System.in);
         Ticket tk;
@@ -269,7 +270,7 @@ public class Menu {
                         //falta agregar fecha de vuelo al avion
                         //Se podria corroborar la mejor categoria del usuario
                         //Se tiene que guardar el precio del tk.= (funcion que lo devuelva)
-                    }else{
+                    } else {
                         //el usuario deberia ingresar otra fecha o salir al menu principal
                     }
                     //guardar datos al usuario (total gastado)
@@ -288,6 +289,36 @@ public class Menu {
             }
         } while (aux != 0);
     }
+
+    public Ticket generarTicket(Usuario user) {
+        Scanner sc = new Scanner(System.in);
+        int opcion = -1;
+        Ticket ticket = new Ticket();
+        Flota avionAux;
+
+        ticket.setUsuarioDni(user.getDni());
+        ticket.setFecha(fechaDeVuelo()); //generar funcion que me diga si esta disponible la ffecha sino que elija otra
+        ticket = menuOrigen(ticket);
+        ticket.setPasajeros(acompañantes());
+        avionAux = seleccionarAvion(ticket);
+
+        while (avionAux == null || opcion == 0) {
+
+            if (avionAux == null) {
+                //ticket.setNumeroDeAvion(seleccionarAvion(ticket).getNumeroAvion());
+                //pedirle que ingrese otra fecha o cantidad de pasajeros
+            } else {
+                //termino de generar ticket y genero el pago
+            }
+
+        }
+        System.out.println(ticket.toString());
+        System.out.println("Los datos son correctos? 1 por si / 0 por no");
+        opcion = sc.nextInt();
+        if (opcion != 1) ticket = null;
+        return ticket;
+    }
+
     public Ticket menuOrigen(Ticket tk) {
         int opcion = 0;
         int destino = 0;
@@ -344,29 +375,10 @@ public class Menu {
             }
         }
         return tk;
-    }
-    public Ticket generarTicket(Usuario user) {
-        Scanner sc = new Scanner(System.in);
-        int opcion = 0;
-        Ticket ticket = new Ticket();
-        Flota avionAux;
-        ticket.setUsuarioDni(user.getDni());
-        ticket.setFecha(fechaDeVuelo()); //generar funcion que me diga si esta disponible la ffecha sino que elija otra
-        ticket = menuOrigen(ticket);
-        ticket.setPasajeros(acompañantes());
-        avionAux = seleccionarAvion(ticket);
-        if (avionAux != null){
-            ticket.setNumeroDeAvion(seleccionarAvion(ticket).getNumeroAvion());
-        }else {
-            System.out.println("No hay aviones disponibles");
-        }
-        System.out.println(ticket.toString());
-        System.out.println("Los datos son correctos? 1 por si / 0 por no");
-        opcion = sc.nextInt();
-        if (opcion != 1) ticket = null;
-        return ticket;
-    }
+    }//selecciona origen y destino, devuelvo tk con esos datos
+
     public LocalDate fechaDeVuelo() {
+
         LocalDate fecha;
         System.out.println("Ingrese el año en el que quiere viajar.\n");
         int año = ingreseUnNumero();
@@ -377,11 +389,13 @@ public class Menu {
         fecha = LocalDate.of(año, mes, dia);
         return fecha;
     }
+
     private int ingreseUnNumero() {
         Scanner scanner = new Scanner(System.in);
         int numero = scanner.nextInt();
         return numero;
     }
+
     private int acompañantes() {
         Scanner scanner = new Scanner(System.in);
         int cantidad = 1;
@@ -390,49 +404,72 @@ public class Menu {
         //validar si entran en el avion
         return cantidad;
     }
+
     private Flota seleccionarAvion(Ticket tk) {
         Scanner scanner = new Scanner(System.in);
         Scanner scVuelo = new Scanner(System.in);
         Flota avion;
         int opcionVuelo;
-        HashSet<Integer> numerosVuelos = null;
+        int numerosVuelos = -1;
         Boolean validado = false;
+        int avionSeleccionado = -1;
+        Bronze avionBronze = new Bronze();
 
-        int avionSeleccionado = 0;
         System.out.println("Ingrese categoria de Avion");
         System.out.println("1: Gold");
         System.out.println("2: Silver");
         System.out.println("3: Bronze");
-        avionSeleccionado = scanner.nextInt();
-        if (avionSeleccionado == 3) {
-            Bronze avionBronze = new Bronze();
-            numerosVuelos = avionBronze.mostrarAvionesDisponibles(tk);
-        } else if (avionSeleccionado == 2) {
-            Silver avionSilver = new Silver();
-            numerosVuelos = avionSilver.mostrarAvionesDisponibles(tk);
-        } else if (avionSeleccionado == 1) {
-            Gold avionGold = new Gold();
-            numerosVuelos = avionGold.mostrarAvionesDisponibles(tk);
-        } else {
-            System.out.println("Ingrese una opcion correcta");
+        System.out.println("0: Para salir del sistema.");
+
+        while (avionSeleccionado != 0) {//chequear---------------------------------------------------
+
+            avionSeleccionado = scanner.nextInt();
+            if (avionSeleccionado == 1) {
+                Gold avionGold = new Gold();
+                numerosVuelos = avionGold.mostrarAvionesDisponibles(tk);
+            } else if (avionSeleccionado == 2) {
+                Silver avionSilver = new Silver();
+                numerosVuelos = avionSilver.mostrarAvionesDisponibles(tk);
+            } else if (avionSeleccionado == 3) {
+                validado = avionBronze.mostrarAvionesDisponibles(tk);
+            } else {
+                System.out.println("Ingrese una opcion correcta");
+            }
         }
-        System.out.println("\nSeleccione el numero de vuelo");
-        if(!numerosVuelos.isEmpty()){
-            do{
+
+        if (validado) {
+            System.out.println("\nIngrese el numero de avion en el que desea viajar");
+            numerosVuelos = scVuelo.nextInt();
+
+            List<Bronze> listaDisponibles = avionBronze.leerArchivo();
+
+            for (Flota _avion : listaDisponibles){
+                if (_avion.getNumeroAvion().equals(numerosVuelos)){
+
+                }
+
+            }
+
+
+        }
+
+        /*if (validado) {
+            do {
                 opcionVuelo = scVuelo.nextInt();
-                if(!numerosVuelos.contains(opcionVuelo)){
+                if (){//!numerosVuelos.contains(opcionVuelo)) {
                     System.out.println("Ingrese un valor valido");
                 }
-            }while (!numerosVuelos.contains(opcionVuelo));
+            } while (!numerosVuelos.contains(opcionVuelo));
             listaAviones.get(opcionVuelo).addDate(tk.getFecha());
             avion = listaAviones.get(opcionVuelo);
-        }else{
+        } else {
             avion = null;
-        }
+        }*/
 
         return avion;
     }
-    private void agregarTkALista(Ticket tk){
+
+    private void agregarTkALista(Ticket tk) {
         this.listaTicket.add(tk);
     }
     //endregion
@@ -545,7 +582,7 @@ public class Menu {
     }
 
     // Funcion para agregar nuevos admins
-    private void agregarAdmin(){
+    private void agregarAdmin() {
         Scanner sc = new Scanner(System.in);
         Usuario user = new Usuario();
         ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>(user.leerArchivo());
@@ -553,8 +590,8 @@ public class Menu {
         System.out.println("Ingresa el DNI del usuario a añadir como administrador");
         String _dni = sc.nextLine();
 
-        for (Usuario usuario: listaUsuarios) {
-            if (usuario.getDni().equals(_dni)){
+        for (Usuario usuario : listaUsuarios) {
+            if (usuario.getDni().equals(_dni)) {
                 usuario.setAdmin(true);
                 System.out.println(usuario);
             }
@@ -587,30 +624,31 @@ public class Menu {
         }
     }
 
-    public void agregarBronce(){
+    public void agregarBronce() {
         Bronze bronze = new Bronze();
 
         bronze.agregarEnArchivo();
     }
 
-    public void agregarSilver(){
+    public void agregarSilver() {
         Silver silver = new Silver();
         silver.agregarEnArchivo();
     }
 
-    public void agregarGold(){
+    public void agregarGold() {
         Gold gold = new Gold();
         gold.agregarEnArchivo();
     }
 
-    private void OpcionesAviones(){
+    private void OpcionesAviones() {
         System.out.println("\tTipo de avion");
         System.out.println("1: Avion BRONZE");
         System.out.println("2: Avion SILVER");
         System.out.println("3: Avion GOLD");
         System.out.println("0: Salir al menu admin");
     }
-    public void mostrarVuelosXFecha(){
+
+    public void mostrarVuelosXFecha() {
         LocalDate fecha;
         System.out.println("Ingrese el año.\n");
         int año = ingreseUnNumero();
@@ -620,14 +658,14 @@ public class Menu {
         int dia = ingreseUnNumero();
         fecha = LocalDate.of(año, mes, dia);
 
-        if(listaTicket!= null) {
-            System.out.println("---"+fecha+"---\n");
+        if (listaTicket != null) {
+            System.out.println("---" + fecha + "---\n");
             for (Ticket ticket : listaTicket) {
                 if (ticket.getFecha().equals(fecha)) {
                     System.out.println(ticket.toString());
                 }
             }
-        }else {
+        } else {
             System.out.println("Actualmente no hay vuelos");
         }
     }
