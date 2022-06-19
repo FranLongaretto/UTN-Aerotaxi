@@ -149,7 +149,7 @@ public class Ticket implements Archivos<Ticket> {
                 "\nDNI del pasajero = " + usuarioDni +
                 "\nCancelar Ticket = " + cancelarTicket +
                 "\nNumero de Avion = " + numeroDeAvion +
-                "\n";
+                "----------------------\n";
     }
 
     @Override

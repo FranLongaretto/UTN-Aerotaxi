@@ -122,7 +122,7 @@ public class Usuario implements Archivos<Usuario> {
                 "\nGastado Historico = " + gastadoHistorico +
                 "\nMejor Categoria = " + mejorCategoria +
                 "\nAdmin = " + esAdmin +
-                "\n";
+                "----------------------\n";
     }
 
     //Se hace override de la interfaz para tratar Archivos (en este caso de Usuarios)

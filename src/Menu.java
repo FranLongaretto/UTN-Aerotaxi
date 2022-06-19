@@ -231,12 +231,12 @@ public class Menu {
 
             logUsuario = logUsuario.userLogin(_dni, _password);//chequeo que el usuario exista
             if (logUsuario != null) {
-                System.out.println("Bienvenido, " + logUsuario.getNombre() + " " + logUsuario.getApellido());
+                System.out.println("Bienvenido, " + logUsuario.getNombre() + " " + logUsuario.getApellido() + "\n");
             } else {
-                System.out.println("El usuario y/o contraseña ingresado es incorrecto, intenta nuevamente.");
+                System.out.println("El usuario y/o contraseña ingresado es incorrecto, intenta nuevamente.\n");
             }
         } catch (NoSuchElementException e) {
-            System.out.println("Error, por favor ingrese un texto." + e);
+            System.out.println("Error, por favor ingrese un texto.\n" + e);
         }
         return logUsuario;
     }
@@ -255,7 +255,7 @@ public class Menu {
 
     public void menu_AeroTaxi(Usuario user) {
         Scanner scanner = new Scanner(System.in);
-        Ticket tk;
+        Ticket tk = null;
         int aux = 4;
         //todas las funciones para comprar un pasaje de avion
         do {
@@ -265,21 +265,21 @@ public class Menu {
                 case 1:
                     tk = generarTicket(user);
                     if (tk != null) {
-                        System.out.println(tk.toString());
                         agregarTkALista(tk);
                         tk.agregarEnArchivo();
-                        tk.mostrarArchivo();
+                        System.out.println(tk.toString());
+                        //tk.mostrarArchivo();
 
                         //Se podria corroborar la mejor categoria del usuario
                         //Se tiene que guardar el precio del tk.= (funcion que lo devuelva)
                     } else {
                         //el usuario deberia ingresar otra fecha o salir al menu principal
-                        System.out.println("holaaaaa");
-                    }
-                    //guardar datos al usuario (total gastado)
+                        System.out.println("Error!!");
+                    }//guardar datos al usuario (total gastado)
                     break;
                 case 2:
                     //funcion cancelar vuelo
+                    cancelarVuelo(tk);
                     break;
                 case 3:
                     //mostrar reservas
@@ -289,7 +289,7 @@ public class Menu {
                     System.out.println("Volviendo al menu pricipal.");
                     break;
                 default:
-                    System.out.println("Ingrese un numero valido.");
+                    System.out.println("Ingrese un numero valido.\n");
             }
         } while (aux != 0);
     }
@@ -418,24 +418,28 @@ public class Menu {
         ArrayList<Bronze> bronzesArrayList = new ArrayList<Bronze>(bronze.leerArchivo());
 
         if (goldArrayList != null) {
+            System.out.println("-----------------------------");
+            System.out.println("Fechas aviones GOLD");
             for (Gold avion : goldArrayList) {
-                System.out.println("Fechas aviones GOLD");
                 System.out.println(avion.getFechas());
             }
         }
 
         if (silverArrayList != null) {
+            System.out.println("-----------------------------");
+            System.out.println("Fechas aviones SILVER");
             for (Silver avion : silverArrayList) {
-                System.out.println("Fechas aviones SILVER");
                 System.out.println(avion.getFechas());
             }
         }
 
         if (bronzesArrayList != null) {
+            System.out.println("-----------------------------");
+            System.out.println("Fechas aviones BRONZE");
             for (Bronze avion : bronzesArrayList) {
-                System.out.println("Fechas aviones BRONZE");
                 System.out.println(avion.getFechas());
             }
+            System.out.println("-----------------------------\n");
         }
     }
 
@@ -554,6 +558,10 @@ public class Menu {
         }
     }
     //endregion
+
+    public void cancelarVuelo(Ticket tk) {
+
+    }
 
     //region ----- ADMIN -----
     public void admin() {

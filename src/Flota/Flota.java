@@ -106,6 +106,7 @@ public abstract class Flota {
                 "\nCantidad de pasajeros a bordo = " + pasajerosAbordo +
                 "\nVelocidad maxima = " + velMax +
                 "\nPropulsion = " + propulsion +
-                "\nTarifa Fija = " + tarifaFija;
+                "\nTarifa Fija = " + tarifaFija +
+                "----------------------\n";
     }
 }
