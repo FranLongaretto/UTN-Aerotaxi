@@ -47,7 +47,7 @@ public class Gold extends Flota implements Archivos<Gold> {
         return super.toString() +
                 "\nWifi = " + wifi +
                 "\nCatering = " + catering +
-                "\n";
+                "----------------------\n";
     }
 
     @Override
