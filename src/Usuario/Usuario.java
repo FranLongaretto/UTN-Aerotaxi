@@ -19,8 +19,7 @@ public class Usuario implements Archivos<Usuario> {
     private String password;
     private double gastadoHistorico = 0;
     private TipoAvion mejorCategoria = TipoAvion.BRONZE;
-    private UUID _id;
-
+    private String _id;
     private boolean esAdmin = false;
 
     //Cada usuario va a tener que tener una lista de vuelos comprados y realizados.
@@ -34,11 +33,11 @@ public class Usuario implements Archivos<Usuario> {
         this.edad = edad;
         this.dni = dni;
         this.password = password;
-        this._id = UUID.randomUUID();   //Acordarse de pasar el id a String para guardarlo,en json o archivo, o mostrarlo -> Ejemplo: _id.toString().
+        this._id = UUID.randomUUID().toString().replace("-","").substring(0,8);   //Acordarse de pasar el id a String para guardarlo,en json o archivo, o mostrarlo -> Ejemplo: _id.toString().
     }
 
     public void set_id(){
-        this._id = UUID.randomUUID();
+        this._id = UUID.randomUUID().toString().replace("-","").substring(0,8);
     }
 
     public String getNombre() {
@@ -90,7 +89,7 @@ public class Usuario implements Archivos<Usuario> {
         this.password = password;
     }
 
-    public UUID get_id() {
+    public String get_id() {
         return _id;
     }
 
@@ -112,17 +111,16 @@ public class Usuario implements Archivos<Usuario> {
 
     @Override
     public String toString() {
-        return "----------------------\n" +
-                "\n" +
-                "ID = " + _id +
-                "\nNombre = " + nombre +
-                "\nApellido = " + apellido +
-                "\nEdad = " + edad +
-                "\nDNI = " + dni +
-                "\nGastado Historico = " + gastadoHistorico +
-                "\nMejor Categoria = " + mejorCategoria +
-                "\nAdmin = " + esAdmin +
-                "----------------------\n";
+        return "---------------------------------\n" +
+                "\nID                   =   " + _id +
+                "\nNombre               =   " + nombre +
+                "\nApellido             =   " + apellido +
+                "\nEdad                 =   " + edad +
+                "\nDNI                  =   " + dni +
+                "\nGastado Historico    =   " + gastadoHistorico +
+                "\nMejor Categoria      =   " + mejorCategoria +
+                "\nAdmin                =   " + esAdmin +
+                "\n";
     }
 
     //Se hace override de la interfaz para tratar Archivos (en este caso de Usuarios)

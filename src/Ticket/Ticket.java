@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Ticket implements Archivos<Ticket> {
+    private String nroTicket;
     private LocalDate fecha;
     private Ciudad origen;
     private Ciudad destino;
@@ -18,17 +19,18 @@ public class Ticket implements Archivos<Ticket> {
     private int distancia;
     private String usuarioDni;
     private boolean cancelarTicket;
-    private UUID numeroDeAvion;
+    private String numeroDeAvion;
 
     public Ticket() {
     }
 
     public Ticket(LocalDate fecha, Ciudad origen, Ciudad destino, int pasajeros, String usuarioDni, String numeroDeAvion) throws IOException {
+        this.nroTicket = UUID.randomUUID().toString().replace("-","").substring(0,8);
         this.fecha = fecha;
         this.origen = origen;
         this.destino = destino;
         this.pasajeros = pasajeros;
-        this.numeroDeAvion = UUID.randomUUID();
+        this.numeroDeAvion = numeroDeAvion;
         this.usuarioDni = usuarioDni;
         this.setDistnacia();
         this.setPrecio();
@@ -103,11 +105,11 @@ public class Ticket implements Archivos<Ticket> {
         this.cancelarTicket = cancelarTicket;
     }
 
-    public UUID getNumeroDeAvion() {
+    public String getNumeroDeAvion() {
         return numeroDeAvion;
     }
 
-    public void setNumeroDeAvion(UUID numeroDeAvion) {
+    public void setNumeroDeAvion(String numeroDeAvion) {
         this.numeroDeAvion = numeroDeAvion;
     }
 
@@ -139,17 +141,17 @@ public class Ticket implements Archivos<Ticket> {
 
     @Override
     public String toString() {
-        return "----------------------\n" +
-                "\nFecha = " + fecha +
-                "\nOrigen = " + origen +
-                "\nDestino = " + destino +
-                "\nPasajeros = " + pasajeros +
-                "\nPrecio = " + precio +
-                "\nDistancia = " + distancia +
-                "\nDNI del pasajero = " + usuarioDni +
-                "\nCancelar Ticket = " + cancelarTicket +
-                "\nNumero de Avion = " + numeroDeAvion +
-                "----------------------\n";
+        return "---------------------------------\n" +
+                "\nFecha                =   " + fecha +
+                "\nOrigen               =   " + origen +
+                "\nDestino              =   " + destino +
+                "\nPasajeros            =   " + pasajeros +
+                "\nPrecio               =   " + precio +
+                "\nDistancia            =   " + distancia +
+                "\nDNI del pasajero     =   " + usuarioDni +
+                "\nCancelar Ticket      =   " + cancelarTicket +
+                "\nNumero de Avion      =   " + numeroDeAvion +
+                "\n";
     }
 
     @Override
