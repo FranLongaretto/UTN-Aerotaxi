@@ -25,7 +25,8 @@ public class Bronze extends Flota implements Archivos<Bronze> {
 
     @Override
     public String toString() {
-        return super.toString() + "----------------------\n";
+        return super.toString() +
+                "\n";
     }
     @Override
     public List<Bronze> leerArchivo() {

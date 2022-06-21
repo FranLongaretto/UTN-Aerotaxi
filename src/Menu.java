@@ -1,10 +1,13 @@
+import Utilidades.Utilidades;
 import Flota.*;
 import Ticket.Ciudad;
 import Ticket.Ticket;
 import Usuario.Usuario;
+import jdk.jshell.execution.Util;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.List;
 
 public class Menu {
     private List<Usuario> miLista_Usuarios = new ArrayList<>();
@@ -50,11 +53,11 @@ public class Menu {
 
     // Imprime opciones del menu para el usuario.
     public void opciones_menu() {
-        System.out.println("\t¡Bienveido a AeroTaxi!\n\n");
-        System.out.println("1: Registrarse\n");
-        System.out.println("2: Loguearse\n");
-        System.out.println("3: Admin\n");
-        System.out.println("0: Salir del sistema\n");
+        System.out.println(Utilidades.ANSI_YELLOW + "\n\t¡Bienveido a AEROTAXI!\n" + Utilidades.ANSI_RESET);
+        System.out.println("1 - Registrarse");
+        System.out.println("2 - Loguearse");
+        System.out.println("3 - Admin");
+        System.out.println("0 - Salir del sistema");
     }
     //endregion
 
@@ -83,7 +86,7 @@ public class Menu {
             nuevoUsuario.mostrarArchivo();
         } else {
             //Aviso de usuario existente
-            System.out.println("El usuario ingresado ya se encuentra en el sistema");
+            System.out.println(Utilidades.ANSI_RED + "El usuario ingresado ya se encuentra en el sistema!" + Utilidades.ANSI_RESET);
         }
     }
 
@@ -98,7 +101,7 @@ public class Menu {
             try {
 
                 if (nombre.length() == 0)
-                    throw new ExeptionUsuario("Debe ingresar un nombre");
+                    throw new ExeptionUsuario(Utilidades.ANSI_RED + "Debe ingresar un nombre" + Utilidades.ANSI_RESET);
                 else
                     aux = true;
             } catch (ExeptionUsuario e) {
@@ -122,7 +125,7 @@ public class Menu {
             try {
 
                 if (apellido.length() == 0)
-                    throw new ExeptionUsuario("Debe ingresar un apellido");
+                    throw new ExeptionUsuario(Utilidades.ANSI_RED + "Debe ingresar un apellido" + Utilidades.ANSI_RESET);
                 else
                     aux = true;
             } catch (ExeptionUsuario e) {
@@ -145,13 +148,13 @@ public class Menu {
                 dni = scanner.nextLine();
                 auxNum = Integer.parseInt(dni);
                 if (dni.length() == 0)
-                    throw new ExeptionUsuario("Debe ingresar un DNI");
+                    throw new ExeptionUsuario(Utilidades.ANSI_RED + "Debe ingresar un DNI" + Utilidades.ANSI_RESET);
                 else
                     aux = true;
             } catch (ExeptionUsuario e) {
                 System.out.println(e.getMessage());
             } catch (NumberFormatException e) {
-                System.out.println("Debe ingresar un numero");
+                System.out.println(Utilidades.ANSI_RED + "Debe ingresar un numero" + Utilidades.ANSI_RESET);
             }
         } while (!aux);
         return dni;
@@ -168,7 +171,7 @@ public class Menu {
             edad = scanner.nextInt();
             try {
                 if (edad <= 0 || edad >= 100)
-                    throw new ExeptionUsuario("La edad ingresada no es valida");
+                    throw new ExeptionUsuario(Utilidades.ANSI_RED + "La edad ingresada no es valida" + Utilidades.ANSI_RESET);
                 else
                     aux = true;
             } catch (ExeptionUsuario e) {
@@ -188,7 +191,7 @@ public class Menu {
             contraseña = scanner.nextLine();
             try {
                 if (contraseña.length() < 3 || contraseña.length() > 12) {
-                    throw new ExeptionUsuario("Por favor ingrese una contraseña dentro de los parametros");
+                    throw new ExeptionUsuario(Utilidades.ANSI_RED + "Por favor ingrese una contraseña dentro de los parametros" + Utilidades.ANSI_RESET);
                 } else
                     aux = true;
             } catch (ExeptionUsuario e) {
@@ -231,12 +234,12 @@ public class Menu {
 
             logUsuario = logUsuario.userLogin(_dni, _password);//chequeo que el usuario exista
             if (logUsuario != null) {
-                System.out.println("Bienvenido, " + logUsuario.getNombre() + " " + logUsuario.getApellido() + "\n");
+                System.out.println(Utilidades.ANSI_YELLOW + "\n\nBienvenido, " + logUsuario.getNombre() + " " + logUsuario.getApellido() + "\n" + Utilidades.ANSI_RESET);
             } else {
-                System.out.println("El usuario y/o contraseña ingresado es incorrecto, intenta nuevamente.\n");
+                System.out.println(Utilidades.ANSI_RED + "El usuario y/o contraseña ingresado es incorrecto, intenta nuevamente.\n" + Utilidades.ANSI_RESET);
             }
         } catch (NoSuchElementException e) {
-            System.out.println("Error, por favor ingrese un texto.\n" + e);
+            System.out.println(Utilidades.ANSI_RED + "Error, por favor ingrese un texto.\n" + e + Utilidades.ANSI_RESET);
         }
         return logUsuario;
     }
@@ -247,10 +250,10 @@ public class Menu {
 
     //Menu opciones usuario
     public void menuOpciones() {
-        System.out.println("1: Solicitar un vuelo.\n");
-        System.out.println("2: Cancelar un vuelo.\n");
-        System.out.println("3: Ver reservas.\n");
-        System.out.println("0: Salir.\n");
+        System.out.println("1 - Solicitar un vuelo.");
+        System.out.println("2 - Cancelar un vuelo.");
+        System.out.println("3 - Ver reservas.");
+        System.out.println("0 - Salir.");
     }
 
     public void menu_AeroTaxi(Usuario user) {
@@ -267,9 +270,6 @@ public class Menu {
                     if (tk != null) {
                         agregarTkALista(tk);
                         tk.agregarEnArchivo();
-                        System.out.println(tk.toString());
-                        //tk.mostrarArchivo();
-
                         //Se podria corroborar la mejor categoria del usuario
                         //Se tiene que guardar el precio del tk.= (funcion que lo devuelva)
                     } else {
@@ -279,7 +279,7 @@ public class Menu {
                     break;
                 case 2:
                     //funcion cancelar vuelo
-                    cancelarVuelo(tk);
+                    cancelarVuelo(user);
                     break;
                 case 3:
                     //mostrar reservas
@@ -328,10 +328,10 @@ public class Menu {
         Scanner scanerOrigen = new Scanner(System.in);
         Scanner scanerDestino = new Scanner(System.in);
         System.out.println("Ingrese la ciudad de origen:\n");
-        System.out.println("1: Buenos Aires.");
-        System.out.println("2: Cordoba.");
-        System.out.println("3: Montevideo.");
-        System.out.println("0: Salir.");
+        System.out.println("1 - Buenos Aires.");
+        System.out.println("2 - Cordoba.");
+        System.out.println("3 - Montevideo.");
+        System.out.println("0 - Salir.");
 
         opcion = scanerOrigen.nextInt();
 
@@ -339,23 +339,20 @@ public class Menu {
             case 1:
                 tk.setOrigen(Ciudad.BUENOSAIRES);
                 tk = destinoBsAs(tk);
-                System.out.println(tk);
                 break;
             case 2:
                 tk.setOrigen(Ciudad.CORDOBA);
                 tk = destinoCordoba(tk);
-                System.out.println(tk);
                 break;
             case 3:
                 tk.setOrigen(Ciudad.MONTEVIDEO);
                 tk.setDestino(Ciudad.SANTIAGO);
                 tk.setDistancia(2100);
-                System.out.println(tk);
                 break;
             case 0:
                 break;
             default:
-                System.out.println("Ingrese un numero valido!");
+                System.out.println(Utilidades.ANSI_RED + "Ingrese un numero valido!" + Utilidades.ANSI_RESET);
                 break;
         }
 
@@ -366,10 +363,10 @@ public class Menu {
         Scanner sc = new Scanner(System.in);
         int destino;
 
-        System.out.println("Ingrese destino");
-        System.out.println("1: Montevideo");
-        System.out.println("2: Cordoba");
-        System.out.println("3: Santiago");
+        System.out.println("Ingrese destino:");
+        System.out.println("1 - Montevideo");
+        System.out.println("2 - Cordoba");
+        System.out.println("3 - Santiago");
 
         destino = sc.nextInt();
         if (destino == 1) {
@@ -392,9 +389,9 @@ public class Menu {
         Scanner sc = new Scanner(System.in);
         int destino;
 
-        System.out.println("Ingrese destino");
-        System.out.println("1: Montevideo");
-        System.out.println("2: Santiago");
+        System.out.println("Ingrese destino:");
+        System.out.println("1 - Montevideo");
+        System.out.println("2 - Santiago");
         destino = sc.nextInt();
         if (destino == 1) {
             tk.setDestino(Ciudad.MONTEVIDEO);
@@ -419,25 +416,31 @@ public class Menu {
 
         if (goldArrayList != null) {
             System.out.println("-----------------------------");
-            System.out.println("Fechas aviones GOLD");
+            System.out.println(Utilidades.ANSI_YELLOW_BACKGROUND + Utilidades.ANSI_BLACK + "Fechas aviones GOLD" + Utilidades.ANSI_RESET);
             for (Gold avion : goldArrayList) {
-                System.out.println(avion.getFechas());
+                System.out.println(Utilidades.ANSI_BOLD + "Numero de vuelo: " + Utilidades.ANSI_RESET + avion.getNumeroAvion()
+                        + Utilidades.ANSI_BOLD + " - Fecha: " + Utilidades.ANSI_RESET + avion.getFechas() + Utilidades.ANSI_RESET
+                        + Utilidades.ANSI_BOLD + " - Pasajeros: " + Utilidades.ANSI_RESET + avion.getPasajerosAbordo() + "/" + avion.getCantMaxPasajeros() + Utilidades.ANSI_RESET);
             }
         }
 
         if (silverArrayList != null) {
             System.out.println("-----------------------------");
-            System.out.println("Fechas aviones SILVER");
+            System.out.println(Utilidades.ANSI_WHITE_BACKGROUND + Utilidades.ANSI_BLACK + "Fechas aviones SILVER" + Utilidades.ANSI_RESET);
             for (Silver avion : silverArrayList) {
-                System.out.println(avion.getFechas());
+                System.out.println(Utilidades.ANSI_BOLD + "Numero de vuelo: " + Utilidades.ANSI_RESET + avion.getNumeroAvion()
+                        + Utilidades.ANSI_BOLD + " - Fecha: " + Utilidades.ANSI_RESET + avion.getFechas() + Utilidades.ANSI_RESET
+                        + Utilidades.ANSI_BOLD + " - Pasajeros: " + Utilidades.ANSI_RESET + avion.getPasajerosAbordo() + "/" + avion.getCantMaxPasajeros() + Utilidades.ANSI_RESET);
             }
         }
 
         if (bronzesArrayList != null) {
             System.out.println("-----------------------------");
-            System.out.println("Fechas aviones BRONZE");
+            System.out.println(Utilidades.ANSI_BLACK_BACKGROUND + "Fechas aviones BRONZE" + Utilidades.ANSI_RESET);
             for (Bronze avion : bronzesArrayList) {
-                System.out.println(avion.getFechas());
+                System.out.println(Utilidades.ANSI_BOLD + "Numero de vuelo: " + Utilidades.ANSI_RESET + avion.getNumeroAvion()
+                        + Utilidades.ANSI_BOLD + " - Fecha: " + Utilidades.ANSI_RESET + avion.getFechas() + Utilidades.ANSI_RESET
+                        + Utilidades.ANSI_BOLD + " - Pasajeros: " + Utilidades.ANSI_RESET + avion.getPasajerosAbordo() + "/" + avion.getCantMaxPasajeros() + Utilidades.ANSI_RESET);
             }
             System.out.println("-----------------------------\n");
         }
@@ -491,10 +494,10 @@ public class Menu {
         int avionSeleccionado = -1;
 
         System.out.println("Ingrese categoria de Avion");
-        System.out.println("1: Gold");
-        System.out.println("2: Silver");
-        System.out.println("3: Bronze");
-        System.out.println("0: Para salir del sistema.");
+        System.out.println("1 - Gold.");
+        System.out.println("2 - Silver.");
+        System.out.println("3 - Bronze.");
+        System.out.println("0 - Salir del sistema.");
 
         avionSeleccionado = scanner.nextInt();
         if (avionSeleccionado == 1) {
@@ -539,7 +542,7 @@ public class Menu {
         } else if (avionSeleccionado == 0) {
 
         } else {
-            System.out.println("¡¡Opcion incorrecta, volviendo al menu!!");
+            System.out.println("¡Opcion incorrecta, volviendo al menu!");
         }
         return avion;
     }//devuelve el avion que fue elegido para viajar o null si no se pudo cargar
@@ -557,11 +560,23 @@ public class Menu {
             }
         }
     }
-    //endregion
 
-    public void cancelarVuelo(Ticket tk) {
+    public void cancelarVuelo(Usuario user) {
+        Ticket tk = new Ticket();
+        ArrayList<Ticket> ticketArrayList = new ArrayList<Ticket>(tk.leerArchivo());
+        int i = 1;
 
+        for (Ticket ticket: ticketArrayList) {
+            if (ticket.getUsuarioDni().equals(user.getDni())){
+                System.out.println(i + " - " + ticket.getNumeroDeAvion() + " - " + ticket.getOrigen() + " - " + ticket.getDestino() + " - " + ticket.getFecha() + " - " + ticket.getPasajeros()
+                        + " - " + ticket.getPrecio());
+
+                i++;
+            }
+        }
     }
+
+    //endregion
 
     //region ----- ADMIN -----
     public void admin() {

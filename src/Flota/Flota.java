@@ -14,7 +14,7 @@ public abstract class Flota {
     private float velMax = 300f;
     private TipoPropulsion propulsion = TipoPropulsion.HELICE;
     private int tarifaFija;
-    private UUID numeroAvion = UUID.randomUUID();
+    private String numeroAvion = UUID.randomUUID().toString().replace("-","").substring(0,5);
     public Flota() {
     }
 
@@ -24,7 +24,7 @@ public abstract class Flota {
         this.cantMaxPasajeros = cantMaxPasajeros;
         this.velMax = velMax;
         this.propulsion = propulsion;
-        this.numeroAvion = UUID.randomUUID();
+        this.numeroAvion = UUID.randomUUID().toString().replace("-","").substring(0,5);
         //this.pasajerosAbordo += cantPasajeros;//
     }
     public int getPasajerosAbordo() {
@@ -34,11 +34,11 @@ public abstract class Flota {
         this.pasajerosAbordo += pasajerosAbordo;
     }
 
-    public UUID getNumeroAvion() {
+    public String getNumeroAvion() {
         return numeroAvion;
     }
 
-    public void setNumeroAvion(UUID numeroAvion) {
+    public void setNumeroAvion(String numeroAvion) {
         this.numeroAvion = numeroAvion;
     }
 
@@ -98,15 +98,14 @@ public abstract class Flota {
 
     @Override
     public String toString() {
-        return "----------------------\n" +
-                "\nNumero de Avion = " + "'"+numeroAvion+"'" +
-                "\nCapacidad de combustible = " + capacidad_combustible +
-                "\nCosto de servicio = " + costoServicio +
-                "\nCantidad maxima de pasajeros = " + cantMaxPasajeros +
-                "\nCantidad de pasajeros a bordo = " + pasajerosAbordo +
-                "\nVelocidad maxima = " + velMax +
-                "\nPropulsion = " + propulsion +
-                "\nTarifa Fija = " + tarifaFija +
-                "----------------------\n";
+        return "---------------------------------\n" +
+                "\nNumero de Avion               =  " + "'"+numeroAvion+"'" +
+                "\nCapacidad de combustible      =  " + capacidad_combustible +
+                "\nCosto de servicio             =  " + costoServicio +
+                "\nCantidad maxima de pasajeros  =  " + cantMaxPasajeros +
+                "\nCantidad de pasajeros a bordo =  " + pasajerosAbordo +
+                "\nVelocidad maxima              =  " + velMax +
+                "\nPropulsion                    =  " + propulsion +
+                "\nTarifa Fija                   =  " + tarifaFija;
     }
 }

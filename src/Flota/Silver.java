@@ -36,8 +36,8 @@ public class Silver extends Flota implements Archivos<Silver> {
     @Override
     public String toString() {
         return super.toString() +
-                "\nCatering = " + catering +
-                "----------------------\n";
+                "\nCatering                      =  " + catering +
+                "\n";
     }
 
     @Override
