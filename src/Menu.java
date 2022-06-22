@@ -562,32 +562,50 @@ public class Menu {
     }
 
     public void cancelarVuelo(Usuario user) {
-        Ticket tk = new Ticket();
         Scanner scanner = new Scanner(System.in);
-        //ArrayList<Ticket> ticketArrayList = new ArrayList<Ticket>(tk.leerArchivo());
-        listaTicket = tk.leerArchivo();
+        Ticket tk = new Ticket();
+        ArrayList<Ticket> ticketArrayList = new ArrayList<Ticket>(tk.leerArchivo());
+        boolean flag = false;
         int i = 1;
+        LocalDate hoy = LocalDate.now();
 
-        for (Ticket ticket: listaTicket) {
-            if (ticket.getUsuarioDni().equals(user.getDni())){
-                System.out.println(i + " - " + ticket.getNroTicket() + " - " + ticket.getOrigen() + " - " + ticket.getDestino() + " - " + ticket.getFecha() + " - " + ticket.getPasajeros()
-                        + " - " + ticket.getPrecio());
+        System.out.println(hoy);
+        System.out.println(hoy.minusDays(1));
 
-                i++;
+        if (ticketArrayList!= null){
+            for (Ticket ticket: ticketArrayList) {
+                if (ticket.getUsuarioDni().equals(user.getDni()) && !hoy.equals(ticket.getFecha().minusDays(1))){
+                    System.out.println(Utilidades.ANSI_PURPLE + i + Utilidades.ANSI_RESET +
+                            Utilidades.ANSI_BOLD + " - Numero de Ticket: " + Utilidades.ANSI_RESET + ticket.getNroTicket() +
+                            Utilidades.ANSI_BOLD + " - Origen: " + Utilidades.ANSI_RESET + ticket.getOrigen() +
+                            Utilidades.ANSI_BOLD + " - Destino: " + Utilidades.ANSI_RESET + ticket.getDestino() +
+                            Utilidades.ANSI_BOLD + " - Fecha: " + Utilidades.ANSI_RESET + ticket.getFecha() +
+                            Utilidades.ANSI_BOLD + " - Pasajeros: " + Utilidades.ANSI_RESET + ticket.getPasajeros() +
+                            Utilidades.ANSI_BOLD + " - Precio: " + Utilidades.ANSI_RESET + ticket.getPrecio());
+                    flag = true;
+                    i++;
+                }
             }
         }
-        System.out.println("Ingrese el numero de ticket a cancelar.\n");
-        String aux = scanner.nextLine();
 
-        for (Ticket ticket : listaTicket){
-            if(ticket.getNroTicket().equals(aux)){
-                ticket.setCancelarTicket(true);
-                System.out.println(ticket);
+        if(flag != false){
+            System.out.println("Ingrese el numero de ticket a cancelar.\n");
+            String aux = scanner.nextLine();
 
+            for (Ticket ticket: ticketArrayList) {
+                if (ticket.getNroTicket().equals(aux)){
+                    tk = ticket;
+                }
             }
-        }
-       //tk.sobreEscribirArchivo(listaTicket);
 
+            ticketArrayList.remove(tk);
+
+            tk.sobreEscribirArchivo(ticketArrayList);
+        }
+
+        else {
+            System.out.println(Utilidades.ANSI_RED + "No tenes reservas para cancelar!" + Utilidades.ANSI_RESET);
+        }
     }
 
     //endregion
