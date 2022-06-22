@@ -25,7 +25,7 @@ public class Ticket implements Archivos<Ticket> {
     }
 
     public Ticket(LocalDate fecha, Ciudad origen, Ciudad destino, int pasajeros, String usuarioDni, String numeroDeAvion) throws IOException {
-        this.nroTicket = UUID.randomUUID().toString().replace("-","").substring(0,8);
+        this.nroTicket = addNroTicket();
         this.fecha = fecha;
         this.origen = origen;
         this.destino = destino;
@@ -35,6 +35,18 @@ public class Ticket implements Archivos<Ticket> {
         this.setDistnacia();
         this.setPrecio();
         this.cancelarTicket = false;
+    }
+
+    public void setNroTicket() {
+        this.nroTicket = addNroTicket();
+    }
+
+    private String addNroTicket() {
+        return UUID.randomUUID().toString().replace("-","").substring(0,8);
+    }
+
+    public String getNroTicket() {
+        return nroTicket;
     }
 
     public void setPrecio(double precio) {
@@ -209,7 +221,7 @@ public class Ticket implements Archivos<Ticket> {
     }
     @Override
     public void sobreEscribirArchivo(ArrayList listaArch) {
-        File fileUsuarios = new File("AvionesGold.json");
+        File fileUsuarios = new File("Tickets.json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         try {
