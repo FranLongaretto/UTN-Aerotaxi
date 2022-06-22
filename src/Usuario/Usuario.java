@@ -116,8 +116,8 @@ public class Usuario implements Archivos<Usuario> {
                 "\nID                   =   " + _id +
                 "\nNombre               =   " + nombre +
                 "\nApellido             =   " + apellido +
-                "\nEdad                 =   " + edad +
                 "\nDNI                  =   " + dni +
+                "\nEdad                 =   " + edad +
                 "\nGastado Historico    =   " + gastadoHistorico +
                 "\nMejor Categoria      =   " + mejorCategoria +
                 "\nAdmin                =   " + esAdmin;

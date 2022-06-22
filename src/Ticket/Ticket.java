@@ -18,7 +18,6 @@ public class Ticket implements Archivos<Ticket> {
     private double precio;
     private int distancia;
     private String usuarioDni;
-    private boolean cancelarTicket;
     private String numeroDeAvion;
 
     public Ticket() {
@@ -34,7 +33,6 @@ public class Ticket implements Archivos<Ticket> {
         this.usuarioDni = usuarioDni;
         this.setDistnacia();
         this.setPrecio();
-        this.cancelarTicket = false;
     }
 
     public void setNroTicket() {
@@ -101,20 +99,8 @@ public class Ticket implements Archivos<Ticket> {
         this.pasajeros = pasajeros;
     }
 
-    public boolean isCancelarTicket() {
-        return cancelarTicket;
-    }
-
     public String getUsuarioDni() {
         return usuarioDni;
-    }
-
-    public boolean getCancelarTicket() {
-        return this.cancelarTicket;
-    }
-
-    public void setCancelarTicket(boolean cancelarTicket) {
-        this.cancelarTicket = cancelarTicket;
     }
 
     public String getNumeroDeAvion() {
@@ -154,6 +140,8 @@ public class Ticket implements Archivos<Ticket> {
     @Override
     public String toString() {
         return "---------------------------------\n" +
+                "\nNumero de ticket     =   " + nroTicket +
+                "\nNumero de Avion      =   " + numeroDeAvion +
                 "\nFecha                =   " + fecha +
                 "\nOrigen               =   " + origen +
                 "\nDestino              =   " + destino +
@@ -161,8 +149,6 @@ public class Ticket implements Archivos<Ticket> {
                 "\nPrecio               =   " + precio +
                 "\nDistancia            =   " + distancia +
                 "\nDNI del pasajero     =   " + usuarioDni +
-                "\nCancelar Ticket      =   " + cancelarTicket +
-                "\nNumero de Avion      =   " + numeroDeAvion +
                 "\n";
     }
 
