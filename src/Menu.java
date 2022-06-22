@@ -449,7 +449,8 @@ public class Menu {
         return fecha;
     }
 
-    private int ingreseUnNumero() {
+    private int ingreseUnNumero(){
+
         Scanner scanner = new Scanner(System.in);
         int numero = scanner.nextInt();
         return numero;
@@ -633,10 +634,10 @@ public class Menu {
                         break;
                 }
             } catch (InputMismatchException e) {//capturo el error sobre dato ingresado
-                System.out.println("Error, debe ingresar un numero!");
+                System.out.println(Utilidades.ANSI_RED + "Error, debe ingresar un numero!" + Utilidades.ANSI_RESET);
 
             } catch (NoSuchElementException e) {//sino capturo el error y lo gestiono
-                System.out.println("Error");//volver a pedirle que ingrese bien el dato
+                System.out.println(Utilidades.ANSI_RED + "Error" + Utilidades.ANSI_RESET);//volver a pedirle que ingrese bien el dato
             }
         }
     }
@@ -694,10 +695,10 @@ public class Menu {
             if (logUsuario != null && logUsuario.isAdmin()) {
                 valido = true;
             } else {
-                System.out.println("El usuario y/o contraseña ingresado es incorrecto o no sos Administrador.");
+                System.out.println(Utilidades.ANSI_RED + "El usuario y/o contraseña ingresado es incorrecto o no eres un Administrador." + Utilidades.ANSI_RESET);
             }
         } catch (NoSuchElementException e) {
-            System.out.println("Error, por favor ingrese un texto." + e);
+            System.out.println(Utilidades.ANSI_RED + "Error, por favor ingrese un texto." + Utilidades.ANSI_RESET + e);
         }
 
         return valido;
@@ -718,7 +719,6 @@ public class Menu {
                 System.out.println(usuario);
             }
         }
-
         user.sobreEscribirArchivo(listaUsuarios);
     }
 
@@ -741,7 +741,7 @@ public class Menu {
                 case 0: //Salir menu admin
                     adminMenu();
                 default:
-                    System.out.println("Ingrese una opcion valida.");
+                    System.out.println(Utilidades.ANSI_RED + "Ingrese una opcion valida." + Utilidades.ANSI_RESET);
             }
         }
     }
@@ -752,38 +752,33 @@ public class Menu {
 
         System.out.println("Ingrese la cantidad de pasajeros");
         int cantPasajeros = sc.nextInt();
+
         bronze.setCantMaxPasajeros(cantPasajeros);
-
         bronze.setFechas(fechaDeVuelo());
-
         bronze.agregarEnArchivo();
     }
 
     public void agregarSilver() {
         Silver silver = new Silver();
-
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Ingrese la cantidad de pasajeros");
         int cantPasajeros = sc.nextInt();
+
         silver.setCantMaxPasajeros(cantPasajeros);
-
         silver.setFechas(fechaDeVuelo());
-
         silver.agregarEnArchivo();
     }
 
     public void agregarGold() {
         Gold gold = new Gold();
-
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Ingrese la cantidad de pasajeros");
         int cantPasajeros = sc.nextInt();
+
         gold.setCantMaxPasajeros(cantPasajeros);
-
         gold.setFechas(fechaDeVuelo());
-
         gold.agregarEnArchivo();
     }
 
@@ -802,7 +797,7 @@ public class Menu {
         ArrayList<Silver> silverArrayList = new ArrayList<Silver>(silver.leerArchivo());
         Bronze bronze = new Bronze();
         ArrayList<Bronze> bronzesArrayList = new ArrayList<Bronze>(bronze.leerArchivo());
-
+        boolean aux1 = false, aux2 = false, aux3 = false;
 
         if (goldArrayList != null) {
             for (Gold avion : goldArrayList) {
@@ -810,6 +805,9 @@ public class Menu {
                     System.out.println("Fechas aviones GOLD");
                     System.out.println(avion);
                 }
+            }
+            if (!aux1) {
+                System.out.println(Utilidades.ANSI_RED + "No hay vuelos Gold para la fecha solicitada." + Utilidades.ANSI_RESET);
             }
         }
 
@@ -820,6 +818,9 @@ public class Menu {
                     System.out.println(avion);
                 }
             }
+            if (!aux2) {
+                System.out.println(Utilidades.ANSI_RED + "No hay vuelos Silver para la fecha solicitada." + Utilidades.ANSI_RESET);
+            }
         }
 
         if (bronzesArrayList != null) {
@@ -827,9 +828,13 @@ public class Menu {
                 if (avion.getFechas().equals(fecha)) {
                     System.out.println("Fechas aviones BRONZE");
                     System.out.println(avion);
+                    aux3 = true;
                 }
             }
+            if (!aux1) {
+                System.out.println(Utilidades.ANSI_RED + "No hay vuelos Bronze para la fecha solicitada\n." + Utilidades.ANSI_RESET);
+            }
         }
+        //endregion
     }
-    //endregion
 }
