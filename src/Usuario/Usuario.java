@@ -2,6 +2,7 @@ package Usuario;
 
 import Flota.TipoAvion;
 import Interfaces.Archivos;
+import Utilidades.Utilidades;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -111,7 +112,7 @@ public class Usuario implements Archivos<Usuario> {
 
     @Override
     public String toString() {
-        return "---------------------------------\n" +
+        return  Utilidades.ANSI_BLUE + "---------------------------------" + Utilidades.ANSI_RESET +
                 "\nID                   =   " + _id +
                 "\nNombre               =   " + nombre +
                 "\nApellido             =   " + apellido +
@@ -119,8 +120,7 @@ public class Usuario implements Archivos<Usuario> {
                 "\nDNI                  =   " + dni +
                 "\nGastado Historico    =   " + gastadoHistorico +
                 "\nMejor Categoria      =   " + mejorCategoria +
-                "\nAdmin                =   " + esAdmin +
-                "\n";
+                "\nAdmin                =   " + esAdmin;
     }
 
     //Se hace override de la interfaz para tratar Archivos (en este caso de Usuarios)

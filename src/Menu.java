@@ -1,7 +1,6 @@
 import Utilidades.Utilidades;
 import Flota.*;
-import Ticket.Ciudad;
-import Ticket.Ticket;
+import Ticket.*;
 import Usuario.Usuario;
 import jdk.jshell.execution.Util;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public class Menu {
     private List<Usuario> miLista_Usuarios = new ArrayList<>();
     private List<Flota> listaAviones = new ArrayList<>();//guardar aviones que van a viajar con sus respectivas fechas
-    private List<Ticket> listaTicket = new ArrayList<>();
+    private List<Ticket> listaTicket = new ArrayList<Ticket>();
 
     //region ----- Menu -----
     public void inicio_menu() {
@@ -82,8 +81,9 @@ public class Menu {
         if (validacion) {
             //Guardar usuario en archivo
             nuevoUsuario.agregarEnArchivo();
-            System.out.printf("Registro Completado \n");
-            nuevoUsuario.mostrarArchivo();
+            System.out.println(nuevoUsuario.toString());
+            System.out.println(Utilidades.ANSI_BLUE + "---------------------------------" + Utilidades.ANSI_RESET);
+            System.out.printf(Utilidades.ANSI_BLUE + "El usuario a sido registrado con exito.\n" + Utilidades.ANSI_RESET);
         } else {
             //Aviso de usuario existente
             System.out.println(Utilidades.ANSI_RED + "El usuario ingresado ya se encuentra en el sistema!" + Utilidades.ANSI_RESET);
@@ -317,7 +317,7 @@ public class Menu {
                 opcion = sc.nextInt();
             }
         } while (opcion != 0);
-
+        ticket.setNroTicket();
 
         return ticket;
     }
@@ -563,17 +563,31 @@ public class Menu {
 
     public void cancelarVuelo(Usuario user) {
         Ticket tk = new Ticket();
-        ArrayList<Ticket> ticketArrayList = new ArrayList<Ticket>(tk.leerArchivo());
+        Scanner scanner = new Scanner(System.in);
+        //ArrayList<Ticket> ticketArrayList = new ArrayList<Ticket>(tk.leerArchivo());
+        listaTicket = tk.leerArchivo();
         int i = 1;
 
-        for (Ticket ticket: ticketArrayList) {
+        for (Ticket ticket: listaTicket) {
             if (ticket.getUsuarioDni().equals(user.getDni())){
-                System.out.println(i + " - " + ticket.getNumeroDeAvion() + " - " + ticket.getOrigen() + " - " + ticket.getDestino() + " - " + ticket.getFecha() + " - " + ticket.getPasajeros()
+                System.out.println(i + " - " + ticket.getNroTicket() + " - " + ticket.getOrigen() + " - " + ticket.getDestino() + " - " + ticket.getFecha() + " - " + ticket.getPasajeros()
                         + " - " + ticket.getPrecio());
 
                 i++;
             }
         }
+        System.out.println("Ingrese el numero de ticket a cancelar.\n");
+        String aux = scanner.nextLine();
+
+        for (Ticket ticket : listaTicket){
+            if(ticket.getNroTicket().equals(aux)){
+                ticket.setCancelarTicket(true);
+                System.out.println(ticket);
+
+            }
+        }
+       //tk.sobreEscribirArchivo(listaTicket);
+
     }
 
     //endregion
