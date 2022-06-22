@@ -17,11 +17,11 @@ public class Menu {
     public void inicio_menu() {
         //ejecucion del programa
         Scanner scanner = new Scanner(System.in);
-        int respuesta = 5;
+        int respuesta = 0;
 
-        while (respuesta != 0) {
+        do {
             opciones_menu();
-            try {//si ingresa el dato correcto sigue funcinando segun lo debido
+            try {
                 respuesta = (int) scanner.nextInt();
                 switch (respuesta) {
                     case 1:
@@ -38,16 +38,16 @@ public class Menu {
                         admin();
                         break;
                     case 0:
-                        System.out.println("Saliendo del sistema...");
+                        System.out.println(Utilidades.ANSI_BLUE + "Saliendo del sistema..." + Utilidades.ANSI_RESET);
                         break;
                 }
             } catch (InputMismatchException e) {//capturo el error sobre dato ingresado
-                System.out.println("Error, debe ingresar un numero!");
+                System.out.println(Utilidades.ANSI_RED + "Error, debe ingresar un numero!" + Utilidades.ANSI_RESET);
 
             } catch (NoSuchElementException e) {//sino capturo el error y lo gestiono
-                System.out.println("Error");//volver a pedirle que ingrese bien el dato
+                System.out.println(Utilidades.ANSI_RED + "Error" + Utilidades.ANSI_RESET);//volver a pedirle que ingrese bien el dato
             }
-        }
+        } while (respuesta != 0);
     }
 
     // Imprime opciones del menu para el usuario.
@@ -119,11 +119,9 @@ public class Menu {
         String apellido;
         System.out.println("Ingrese su apellido: ");
         do {
-
             Scanner scanner = new Scanner(System.in);
             apellido = scanner.nextLine();
             try {
-
                 if (apellido.length() == 0)
                     throw new ExeptionUsuario(Utilidades.ANSI_RED + "Debe ingresar un apellido" + Utilidades.ANSI_RESET);
                 else
@@ -270,26 +268,21 @@ public class Menu {
                     if (tk != null) {
                         agregarTkALista(tk);
                         tk.agregarEnArchivo();
-                        //Se podria corroborar la mejor categoria del usuario
-                        //Se tiene que guardar el precio del tk.= (funcion que lo devuelva)
                     } else {
-                        //el usuario deberia ingresar otra fecha o salir al menu principal
                         System.out.println("Error!!");
-                    }//guardar datos al usuario (total gastado)
+                    }
                     break;
                 case 2:
-                    //funcion cancelar vuelo
                     cancelarVuelo(user);
                     break;
                 case 3:
-                    //mostrar reservas
                     mostrarReservasUsuario(user);
                     break;
                 case 0:
-                    System.out.println("Volviendo al menu pricipal.");
+                    System.out.println(Utilidades.ANSI_BLUE + "Volviendo al menu pricipal." + Utilidades.ANSI_RESET);
                     break;
                 default:
-                    System.out.println("Ingrese un numero valido.\n");
+                    System.out.println(Utilidades.ANSI_RED + "Ingrese un numero valido.\n" + Utilidades.ANSI_RESET);
             }
         } while (aux != 0);
     }
@@ -313,7 +306,7 @@ public class Menu {
                 opcion = sc.nextInt();
             } else {
                 //termino de generar ticket y genero el pago
-                System.out.println("Ingrese 1 si desea cambiar los datos, 0 para continuar ");
+                System.out.println(Utilidades.ANSI_GREEN + "Ingrese 1 si desea cambiar los datos, 0 para continuar." + Utilidades.ANSI_RESET);
                 opcion = sc.nextInt();
             }
         } while (opcion != 0);
@@ -379,9 +372,8 @@ public class Menu {
             tk.setDestino(Ciudad.SANTIAGO);
             tk.setDistancia(1400);
         } else {
-            System.out.println("Ingrese un numero valido!");
+            System.out.println(Utilidades.ANSI_RED + "Ingrese un numero valido!" + Utilidades.ANSI_RESET);
         }
-
         return tk;
     }
 
@@ -400,9 +392,8 @@ public class Menu {
             tk.setDestino(Ciudad.SANTIAGO);
             tk.setDistancia(1050);
         } else {
-            System.out.println("Ingrese un numero valido!");
+            System.out.println(Utilidades.ANSI_RED + "Ingrese un numero valido!" + Utilidades.ANSI_RESET);
         }
-
         return tk;
     }
 
@@ -423,7 +414,6 @@ public class Menu {
                         + Utilidades.ANSI_BOLD + " - Pasajeros: " + Utilidades.ANSI_RESET + avion.getPasajerosAbordo() + "/" + avion.getCantMaxPasajeros() + Utilidades.ANSI_RESET);
             }
         }
-
         if (silverArrayList != null) {
             System.out.println("-----------------------------");
             System.out.println(Utilidades.ANSI_WHITE_BACKGROUND + Utilidades.ANSI_BLACK + "Fechas aviones SILVER" + Utilidades.ANSI_RESET);
@@ -433,7 +423,6 @@ public class Menu {
                         + Utilidades.ANSI_BOLD + " - Pasajeros: " + Utilidades.ANSI_RESET + avion.getPasajerosAbordo() + "/" + avion.getCantMaxPasajeros() + Utilidades.ANSI_RESET);
             }
         }
-
         if (bronzesArrayList != null) {
             System.out.println("-----------------------------");
             System.out.println(Utilidades.ANSI_BLACK_BACKGROUND + "Fechas aviones BRONZE" + Utilidades.ANSI_RESET);
@@ -478,9 +467,8 @@ public class Menu {
             tk.setPasajeros(cantidad);
             aux = true;
         } else {
-            System.out.println("Ya no queda espacio en el avion.");
+            System.out.println(Utilidades.ANSI_RED + "Ya no queda espacio en el avion." + Utilidades.ANSI_RESET);
         }
-        //validar si entran en el avion
         return aux;
     }//devuelve false si no quedan espacios en el avion
 
@@ -542,10 +530,10 @@ public class Menu {
         } else if (avionSeleccionado == 0) {
 
         } else {
-            System.out.println("¡Opcion incorrecta, volviendo al menu!");
+            System.out.println(Utilidades.ANSI_RED + "¡Opcion incorrecta, volviendo al menu!" + Utilidades.ANSI_RESET);
         }
         return avion;
-    }//devuelve el avion que fue elegido para viajar o null si no se pudo cargar
+    }
 
     private void agregarTkALista(Ticket tk) {
         this.listaTicket.add(tk);
@@ -553,12 +541,17 @@ public class Menu {
 
     public void mostrarReservasUsuario(Usuario user) {
         Ticket tk = new Ticket();
+        boolean aux = false;
+
         ArrayList<Ticket> ticketArrayList = new ArrayList<Ticket>(tk.leerArchivo());
         for (Ticket ticket : ticketArrayList) {
             if (user.getDni().equals(ticket.getUsuarioDni())) {
                 System.out.println(ticket);
+                aux = true;
             }
         }
+        if (!aux)
+            System.out.println(Utilidades.ANSI_RED + "No tienes ninguna reserva.\n" + Utilidades.ANSI_RESET);
     }
 
     public void cancelarVuelo(Usuario user) {
@@ -569,12 +562,9 @@ public class Menu {
         int i = 1;
         LocalDate hoy = LocalDate.now();
 
-        System.out.println(hoy);
-        System.out.println(hoy.minusDays(1));
-
-        if (ticketArrayList!= null){
-            for (Ticket ticket: ticketArrayList) {
-                if (ticket.getUsuarioDni().equals(user.getDni()) && !hoy.equals(ticket.getFecha().minusDays(1))){
+        if (ticketArrayList != null) {
+            for (Ticket ticket : ticketArrayList) {
+                if (ticket.getUsuarioDni().equals(user.getDni()) && !hoy.equals(ticket.getFecha().minusDays(1))) {
                     System.out.println(Utilidades.ANSI_PURPLE + i + Utilidades.ANSI_RESET +
                             Utilidades.ANSI_BOLD + " - Numero de Ticket: " + Utilidades.ANSI_RESET + ticket.getNroTicket() +
                             Utilidades.ANSI_BOLD + " - Origen: " + Utilidades.ANSI_RESET + ticket.getOrigen() +
@@ -587,24 +577,20 @@ public class Menu {
                 }
             }
         }
-
-        if(flag != false){
+        if (flag != false) {
             System.out.println("Ingrese el numero de ticket a cancelar.\n");
             String aux = scanner.nextLine();
 
-            for (Ticket ticket: ticketArrayList) {
-                if (ticket.getNroTicket().equals(aux)){
+            for (Ticket ticket : ticketArrayList) {
+                if (ticket.getNroTicket().equals(aux)) {
                     tk = ticket;
                 }
             }
-
             ticketArrayList.remove(tk);
-
             tk.sobreEscribirArchivo(ticketArrayList);
-        }
-
-        else {
-            System.out.println(Utilidades.ANSI_RED + "No tenes reservas para cancelar!" + Utilidades.ANSI_RESET);
+            System.out.println(Utilidades.ANSI_BLUE + "El ticket ha sido cancelado con exito.\n" + Utilidades.ANSI_RESET);
+        } else {
+            System.out.println(Utilidades.ANSI_RED + "No tienes reservas para cancelar!" + Utilidades.ANSI_RESET);
         }
     }
 

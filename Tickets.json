@@ -1,1 +1,1 @@
-[{"nroTicket":"80752448","fecha":[2022,6,25],"origen":"MONTEVIDEO","destino":"SANTIAGO","pasajeros":2,"precio":325000.0,"distancia":2100,"usuarioDni":"43317391","numeroDeAvion":"3bb81"}]
+[{"nroTicket":"80752448","fecha":[2022,6,25],"origen":"MONTEVIDEO","destino":"SANTIAGO","pasajeros":2,"precio":325000.0,"distancia":2100,"usuarioDni":"43317391","numeroDeAvion":"3bb81"},{"nroTicket":"d5fb7180","fecha":[2022,6,22],"origen":"CORDOBA","destino":"SANTIAGO","pasajeros":0,"precio":0.0,"distancia":1050,"usuarioDni":"42826925","numeroDeAvion":null}]
