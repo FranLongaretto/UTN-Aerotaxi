@@ -464,7 +464,7 @@ public class Menu {
         System.out.println("Ingrese la cantidad de acompañantes");
         cantidad += scanner.nextInt();
         if (avion.getCantMaxPasajeros() >= (avion.getPasajerosAbordo() + cantidad)) {
-            avion.setPasajerosAbordo(avion.getPasajerosAbordo() + cantidad);
+            avion.setPasajerosAbordo(cantidad);
             tk.setPasajeros(cantidad);
             aux = true;
         } else {
@@ -492,16 +492,19 @@ public class Menu {
         if (avionSeleccionado == 1) {
             Gold avionGold = new Gold();
             List<Gold> listaDisponibles = avionGold.leerArchivo();
-            for (Flota _avion : listaDisponibles) {
+            for (Gold _avion : listaDisponibles) {
                 if (_avion.getFechas().equals(tk.getFecha())) {
                     boolean capacidad = acompañantes(_avion, tk);
                     if (capacidad == true) {
                         tk.setNumeroDeAvion(_avion.getNumeroAvion());
                         tk.setPrecio(avionGold.precioVuelo(tk));
                         avion = _avion;
+
                     }
                 }
             }
+            ArrayList<Gold> listaGold = new ArrayList<>(listaDisponibles);
+            avionGold.sobreEscribirArchivo(listaGold);
         } else if (avionSeleccionado == 2) {
             Silver avionSilver = new Silver();
             List<Silver> listaDisponibles = avionSilver.leerArchivo();
@@ -515,6 +518,8 @@ public class Menu {
                     }
                 }
             }
+            ArrayList<Silver> listaSilver = new ArrayList<>(listaDisponibles);
+            avionSilver.sobreEscribirArchivo(listaSilver);
         } else if (avionSeleccionado == 3) {
             Bronze avionBronze = new Bronze();
             List<Bronze> listaDisponibles = avionBronze.leerArchivo();
@@ -528,6 +533,8 @@ public class Menu {
                     }
                 }
             }
+            ArrayList<Bronze> listaBronze = new ArrayList<>(listaDisponibles);
+            avionBronze.sobreEscribirArchivo(listaBronze);
         } else if (avionSeleccionado == 0) {
 
         } else {
