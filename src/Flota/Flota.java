@@ -25,7 +25,7 @@ public abstract class Flota {
         this.velMax = velMax;
         this.propulsion = propulsion;
         this.numeroAvion = UUID.randomUUID().toString().replace("-","").substring(0,5);
-        //this.pasajerosAbordo += cantPasajeros;//
+        //this.pasajerosAbordo = ;
     }
     public int getPasajerosAbordo() {
         return pasajerosAbordo;
